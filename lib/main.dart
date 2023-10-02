@@ -1,5 +1,4 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nourish_mart/provider/auth_provider.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
