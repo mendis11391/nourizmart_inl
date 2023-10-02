@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "303973469851",
+    "project_id": "nurishmart-auth",
+    "storage_bucket": "nurishmart-auth.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:303973469851:android:254be5ef99a1c7d519003e",
+        "android_client_info": {
+          "package_name": "com.example.nourish_mart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe4KdTfELVku5Qtn5LFRPlZY0BoJ1zDZg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
