@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:nourish_mart/provider/auth_provider.dart';
 import 'package:nourish_mart/screens/categories_screen.dart';
@@ -26,9 +24,17 @@ class _OtpScreenState extends State<OtpScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.purple,
+            ? Container(
+                height: MediaQuery.of(context).size.height,
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.purple,
+                      ),
+                    ),
+                  ],
                 ),
               )
             : Center(
@@ -146,14 +152,16 @@ class _OtpScreenState extends State<OtpScreen> {
               await Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const CategoriesScreen()),
+                    builder: (context) => const CategoriesScreen(),
+                  ),
                   (route) => false);
             } else {
               // new user
               await Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const UserInformationScreen()),
+                    builder: (context) => const UserInformationScreen(),
+                  ),
                   (route) => false);
             }
           });

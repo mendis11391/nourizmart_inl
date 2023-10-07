@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -49,9 +46,18 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyB97ZugT-vSh3n3qdDgbjiPr3Vc6qLIpX4',
+    appId: '1:303973469851:web:ec1b0c09f098bb4c19003e',
+    messagingSenderId: '303973469851',
+    projectId: 'nurishmart-auth',
+    authDomain: 'nurishmart-auth.firebaseapp.com',
+    storageBucket: 'nurishmart-auth.appspot.com',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDe4KdTfELVku5Qtn5LFRPlZY0BoJ1zDZg',
-    appId: '1:303973469851:android:254be5ef99a1c7d519003e',
+    appId: '1:303973469851:android:0dce98bbb7ff6caa19003e',
     messagingSenderId: '303973469851',
     projectId: 'nurishmart-auth',
     storageBucket: 'nurishmart-auth.appspot.com',
@@ -59,7 +65,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC1JlRRNsUJIeSigqYQq-yBLv-7Bnxf00g',
-    appId: '1:303973469851:ios:09ea14cc16a3042c19003e',
+    appId: '1:303973469851:ios:ddc78ab31d8ad0da19003e',
     messagingSenderId: '303973469851',
     projectId: 'nurishmart-auth',
     storageBucket: 'nurishmart-auth.appspot.com',

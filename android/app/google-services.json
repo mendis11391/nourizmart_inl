@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:303973469851:android:254be5ef99a1c7d519003e",
+        "mobilesdk_app_id": "1:303973469851:android:0dce98bbb7ff6caa19003e",
         "android_client_info": {
-          "package_name": "com.example.nourish_mart"
+          "package_name": "com.webtri.nourish_mart"
         }
       },
       "oauth_client": [],

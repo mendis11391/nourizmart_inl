@@ -47,7 +47,7 @@ class AuthProvider extends ChangeNotifier {
             await _firebaseAuth.signInWithCredential(phoneAuthCredential);
           },
           verificationFailed: (error) {
-            throw Exception(error.message);
+            showSnackBar(context, error.message.toString());
           },
           codeSent: (verificationId, forceResending) {
             Navigator.push(
@@ -133,5 +133,11 @@ class AuthProvider extends ChangeNotifier {
         userModel.toMap(),
       ),
     );
+  }
+
+  signout() async {
+    // _firebaseAuth.signOut();
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.remove('user_model');
   }
 }

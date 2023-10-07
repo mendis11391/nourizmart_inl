@@ -1,4 +1,4 @@
-package com.example.nourish_mart
+package com.webtri.nourish_mart
 
 import io.flutter.embedding.android.FlutterActivity
 
