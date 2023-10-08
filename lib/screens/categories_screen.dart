@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nourish_mart/model/user_model.dart';
 import 'package:nourish_mart/screens/register_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -12,10 +13,25 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
+  UserModel? userData;
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
+
+  void getUserData() async {
+    final ap = Provider.of<AuthProvider>(context, listen: false);
+    final userData = await ap.getUserDataFromSP();
+    setState(() {
+      this.userData = userData;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AppBar(
+      appBar: AppBar(
         title: const Text('Categories'),
         actions: [
           IconButton(
@@ -27,6 +43,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           ),
         ],
       ),
+      body: userData != null
+          ? Text('Welcome, ${userData!.name}')
+          : const CircularProgressIndicator(),
     );
   }
 

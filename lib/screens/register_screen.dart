@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:nourish_mart/model/user_model.dart';
 import 'package:nourish_mart/provider/auth_provider.dart';
+import 'package:nourish_mart/screens/categories_screen.dart';
+import 'package:nourish_mart/screens/home_screen.dart';
 import 'package:nourish_mart/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -12,14 +16,49 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final phoneController = TextEditingController();
+  UserModel? userData;
+  late Future checkUserLoggedIn;
+
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
+
+  void getUserData() async {
+    final ap = Provider.of<AuthProvider>(context, listen: false);
+    final uid = ap.uid;
+    final isUserLoggedIn = ap.checkExistingUser();
+    final userData = await ap.getUserDataFromFirestore(uid);
+    setState(() {
+      this.userData = userData;
+      ap.saveUserDataToStProc(userData);
+      checkUserLoggedIn = ap.registeredUserLogin();
+      checkUserLoggedIn.then((value) async {
+        if (value == true) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
+            ),
+            (route) => false,
+          );
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    var pageHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SingleChildScrollView(
-        child: Center(
+        child: SizedBox(
+          height: pageHeight,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 35),
+            padding: const EdgeInsets.only(left: 25, right: 25),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   padding: const EdgeInsets.all(20.0),
@@ -38,12 +77,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   height: 30,
                 ),
                 const Text(
-                  "Register",
+                  "Nourish Mart",
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                userData != null
+                    ? Text('Welcome, ${userData?.email}')
+                    : const Text(''),
                 const SizedBox(
                   height: 20,
                 ),

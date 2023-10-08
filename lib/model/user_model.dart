@@ -2,11 +2,13 @@ class UserModel {
   String name;
   String email;
   String uid;
+  String phoneNumber;
 
   UserModel({
     required this.name,
     required this.email,
     required this.uid,
+    required this.phoneNumber,
   });
 
 // From server
@@ -15,6 +17,7 @@ class UserModel {
       name: map['name'] ?? '',
       email: map['email'] ?? '',
       uid: map['uid'] ?? '',
+      phoneNumber: map['phoneNumber'] ?? '',
     );
   }
 
@@ -24,6 +27,7 @@ class UserModel {
       "name": name,
       "email": email,
       "uid": uid,
+      "phoneNumber": phoneNumber,
     };
   }
 }

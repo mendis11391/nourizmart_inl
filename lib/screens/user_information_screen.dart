@@ -129,7 +129,10 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
   void storeData() async {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     UserModel userModel = UserModel(
-        name: nameController.text, email: emailController.text, uid: "");
+        name: nameController.text,
+        email: emailController.text,
+        uid: ap.uid,
+        phoneNumber: ap.phoneNumber);
     ap.saveUserDataToFireBase(
         context: context,
         userModel: userModel,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nourish_mart/provider/auth_provider.dart';
 import 'package:nourish_mart/screens/categories_screen.dart';
+import 'package:nourish_mart/screens/home_screen.dart';
 import 'package:nourish_mart/screens/user_information_screen.dart';
+import 'package:nourish_mart/screens/welcome_screen.dart';
 import 'package:nourish_mart/utils/utils.dart';
 import 'package:nourish_mart/widgets/custom_button.dart';
 import 'package:pinput/pinput.dart';
@@ -152,7 +154,7 @@ class _OtpScreenState extends State<OtpScreen> {
               await Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CategoriesScreen(),
+                    builder: (context) => const HomeScreen(),
                   ),
                   (route) => false);
             } else {

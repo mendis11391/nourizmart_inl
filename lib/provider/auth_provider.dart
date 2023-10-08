@@ -17,6 +17,8 @@ class AuthProvider extends ChangeNotifier {
   String get uid => _uid!;
   UserModel? _userModel;
   UserModel get userModel => _userModel!;
+  String _phoneNumber = '';
+  String get phoneNumber => _phoneNumber;
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFireStore = FirebaseFirestore.instance;
@@ -39,6 +41,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void signInWithPhone(BuildContext context, String phoneNumber) async {
+    _phoneNumber = phoneNumber;
     try {
       _firebaseAuth.verifyPhoneNumber(
           phoneNumber: phoneNumber,
@@ -135,9 +138,69 @@ class AuthProvider extends ChangeNotifier {
     );
   }
 
+  saveUserDataToStProc(userModelData) async {
+    SharedPreferences s = await SharedPreferences.getInstance();
+    await s.setString(
+      "user_model",
+      jsonEncode(
+        userModelData.toMap(),
+      ),
+    );
+  }
+
   signout() async {
-    // _firebaseAuth.signOut();
+    _firebaseAuth.signOut();
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.remove('user_model');
+    await pref.setBool("is_signedin", false);
+    _isSignedIn = false;
+  }
+
+  Future<UserModel?> getUserDataFromSP() async {
+    SharedPreferences s = await SharedPreferences.getInstance();
+    final userDataString = s.getString("user_model");
+    if (userDataString != null) {
+      final userDataMap = jsonDecode(userDataString);
+      return UserModel.fromMap(userDataMap);
+    }
+    return null;
+  }
+
+  Future<bool> registeredUserLogin() async {
+    if (_uid != null) {
+      DocumentSnapshot snapshot =
+          await _firebaseFireStore.collection("users").doc(_uid).get();
+      if (snapshot.exists) {
+        // User exists
+        return true;
+      } else {
+        // New user
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  Future<UserModel?> getUserDataFromFirestore(String uid) async {
+    try {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection(
+              'users') // Replace 'users' with your Firestore collection name
+          .doc(uid)
+          .get();
+
+      if (userDoc.exists) {
+        // Convert the Firestore document into a UserModel object
+        return UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+      } else {
+        // The document with the given UID does not exist
+        return null;
+      }
+    } catch (e) {
+      // Handle any errors here
+      print('Error fetching user data: $e');
+      return null;
+    }
   }
 }
