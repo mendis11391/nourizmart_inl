@@ -150,6 +150,7 @@ class _OtpScreenState extends State<OtpScreen> {
           // checking if user exists in DB
           ap.checkExistingUser().then((value) async {
             if (value == true) {
+              ap.setSignIn();
               // user exists
               await Navigator.pushAndRemoveUntil(
                   context,

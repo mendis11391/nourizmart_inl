@@ -13,10 +13,11 @@ class AuthProvider extends ChangeNotifier {
   bool get isSignedIn => _isSignedIn;
   bool _isLoading = false;
   bool get isLoading => _isLoading;
-  String? _uid;
-  String get uid => _uid!;
-  UserModel? _userModel;
-  UserModel get userModel => _userModel!;
+  String _uid = '';
+  String get uid => _uid;
+  UserModel _userModel =
+      UserModel(name: '', email: '', uid: '', phoneNumber: '');
+  UserModel get userModel => _userModel;
   String _phoneNumber = '';
   String get phoneNumber => _phoneNumber;
 
@@ -36,6 +37,7 @@ class AuthProvider extends ChangeNotifier {
   Future setSignIn() async {
     final SharedPreferences s = await SharedPreferences.getInstance();
     s.setBool("is_signedin", true);
+    s.setString("uid", _uid);
     _isSignedIn = true;
     notifyListeners();
   }
@@ -80,6 +82,8 @@ class AuthProvider extends ChangeNotifier {
       User? user = (await _firebaseAuth.signInWithCredential(credential)).user;
       if (user != null) {
         _uid = user.uid;
+        DocumentSnapshot userDoc =
+            await FirebaseFirestore.instance.collection('users').doc(uid).get();
         onSuccess();
       }
 
@@ -92,8 +96,10 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<bool> checkExistingUser() async {
+    final SharedPreferences s = await SharedPreferences.getInstance();
+    final String? savedUid = this._uid ?? s.getString(uid);
     DocumentSnapshot snapshot =
-        await _firebaseFireStore.collection("users").doc(_uid).get();
+        await _firebaseFireStore.collection("users").doc(savedUid).get();
     if (snapshot.exists) {
       // User exists
       return true;
@@ -140,12 +146,8 @@ class AuthProvider extends ChangeNotifier {
 
   saveUserDataToStProc(userModelData) async {
     SharedPreferences s = await SharedPreferences.getInstance();
-    await s.setString(
-      "user_model",
-      jsonEncode(
-        userModelData.toMap(),
-      ),
-    );
+    _userModel = userModelData;
+    await s.setString("user_model", jsonEncode(userModel.toMap()));
   }
 
   signout() async {
@@ -184,11 +186,8 @@ class AuthProvider extends ChangeNotifier {
 
   Future<UserModel?> getUserDataFromFirestore(String uid) async {
     try {
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance
-          .collection(
-              'users') // Replace 'users' with your Firestore collection name
-          .doc(uid)
-          .get();
+      DocumentSnapshot userDoc =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
       if (userDoc.exists) {
         // Convert the Firestore document into a UserModel object
@@ -202,5 +201,9 @@ class AuthProvider extends ChangeNotifier {
       print('Error fetching user data: $e');
       return null;
     }
+  }
+
+  fetchIsSignedIn() {
+    return _isSignedIn;
   }
 }

@@ -32,7 +32,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Categories'),
+        title: const Text('Product'),
         actions: [
           IconButton(
             onPressed: signout,
@@ -44,7 +44,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         ],
       ),
       body: userData != null
-          ? Text('Welcome, ${userData!.name}')
+          ? Text('Welcome, ${userData?.name}')
           : const CircularProgressIndicator(),
     );
   }

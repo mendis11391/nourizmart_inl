@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nourish_mart/model/user_model.dart';
 import 'package:nourish_mart/provider/auth_provider.dart';
-import 'package:nourish_mart/screens/categories_screen.dart';
 import 'package:nourish_mart/screens/home_screen.dart';
 import 'package:nourish_mart/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
@@ -22,20 +21,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void initState() {
     super.initState();
-    getUserData();
+    // getUserData();
   }
 
   void getUserData() async {
     final ap = Provider.of<AuthProvider>(context, listen: false);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     final uid = ap.uid;
-    final isUserLoggedIn = ap.checkExistingUser();
     final userData = await ap.getUserDataFromFirestore(uid);
     setState(() {
       this.userData = userData;
       ap.saveUserDataToStProc(userData);
       checkUserLoggedIn = ap.registeredUserLogin();
       checkUserLoggedIn.then((value) async {
-        if (value == true) {
+        if (prefs.getBool('is_signedin') == true) {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -83,9 +82,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                userData != null
-                    ? Text('Welcome, ${userData?.email}')
-                    : const Text(''),
                 const SizedBox(
                   height: 20,
                 ),
