@@ -18,26 +18,41 @@ class CategoriesBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Image.asset(
-            imagePath,
-            width: width,
-          ),
-          TextButton(
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.purple,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CategoriesScreen()),
-              );
-            },
-            child: Text(categoryName),
-          )
-        ],
+    // return SingleChildScrollView(
+    //   child: Column(
+    //     children: [
+    //       Image.asset(
+    //         imagePath,
+    //         width: width,
+    //       ),
+    //       TextButton(
+    //         style: TextButton.styleFrom(
+    //           foregroundColor: Colors.purple,
+    //         ),
+    //         onPressed: () {
+    //           Navigator.push(
+    //             context,
+    //             MaterialPageRoute(builder: (context) => CategoriesScreen()),
+    //           );
+    //         },
+    //         child: Text(categoryName),
+    //       )
+    //     ],
+    //   ),
+    // );
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CategoriesScreen()),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Image.asset(
+          imagePath,
+          width: width,
+        ),
       ),
     );
   }

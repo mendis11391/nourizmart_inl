@@ -18,14 +18,14 @@ class _HomeScreenState extends State<HomeScreen> {
   List allCategories = [
     [
       "Vegitables",
-      "assets/images/categories/vegitables.jpg",
-      250.0,
+      "assets/images/categories/vegitables_sm.png",
+      150.0,
       200.0,
       'categories'
     ],
     [
       "Milk",
-      "assets/images/categories/milk_pack.png",
+      "assets/images/categories/milk_pack_sm.png",
       150.0,
       100.0,
       'categories'
@@ -54,9 +54,11 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           const Padding(
             padding: EdgeInsets.fromLTRB(10, 20, 0, 20),
-            child: Text(
-              "CATEGORIES",
-              style: TextStyle(fontSize: 30),
+            child: Center(
+              child: Text(
+                "CATEGORIES",
+                style: TextStyle(fontSize: 30),
+              ),
             ),
           ),
           const SizedBox(
@@ -69,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisCount: 2),
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(top: 8.0),
                   child: CategoriesBox(
                     categoryName: allCategories[index][0],
                     imagePath: allCategories[index][1],
