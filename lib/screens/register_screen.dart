@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nourish_mart/model/user_model.dart';
 import 'package:nourish_mart/provider/auth_provider.dart';
 import 'package:nourish_mart/screens/home_screen.dart';
+import 'package:nourish_mart/widgets/app_spinner.dart';
 import 'package:nourish_mart/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final phoneController = TextEditingController();
   UserModel? userData;
   late Future checkUserLoggedIn;
+  bool isLoginClicked = false;
 
   @override
   void initState() {
@@ -148,8 +150,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 SizedBox(
                   width: double.infinity,
-                  child: CustomButton(
-                      buttonText: 'Login', onPressed: () => sendPhoneNumber()),
+                  child: isLoginClicked
+                      ? const SizedBox(height: 20, child: AppSpinner())
+                      : CustomButton(
+                          buttonText: 'Login',
+                          onPressed: () => sendPhoneNumber()),
                 ),
               ],
             ),
@@ -160,6 +165,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void sendPhoneNumber() {
+    setState(() {
+      isLoginClicked = true;
+    });
     final ap = Provider.of<AuthProvider>(context, listen: false);
     ap.signInWithPhone(context, '+91${phoneController.text}');
   }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nourish_mart/model/user_model.dart';
 import 'package:nourish_mart/provider/auth_provider.dart';
-import 'package:nourish_mart/screens/register_screen.dart';
 import 'package:nourish_mart/widgets/categories_box.dart';
+import 'package:nourish_mart/widgets/header_options_dropdown.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,13 +39,14 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.purple,
         title: Text('${userData?.name}'),
         actions: [
-          IconButton(
-            onPressed: signout,
-            icon: const Icon(
-              Icons.exit_to_app,
-              color: Colors.white,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: signout,
+          //   icon: const Icon(
+          //     Icons.exit_to_app,
+          //     color: Colors.white,
+          //   ),
+          // ),
+          HeaderOptionsDropdown(),
         ],
       ),
       body: Column(
@@ -100,16 +101,5 @@ class _HomeScreenState extends State<HomeScreen> {
       this.userData = userData;
       ap.saveUserDataToStProc(userData);
     });
-  }
-
-  void signout() async {
-    final ap = Provider.of<AuthProvider>(context, listen: false);
-    ap.signout();
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const RegisterScreen(),
-        ),
-        (route) => false);
   }
 }

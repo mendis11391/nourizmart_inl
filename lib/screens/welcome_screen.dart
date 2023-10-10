@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nourish_mart/screens/home_screen.dart';
 import 'package:nourish_mart/screens/register_screen.dart';
+import 'package:nourish_mart/widgets/app_spinner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -43,9 +44,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: CircularProgressIndicator(
-        color: Colors.purple,
-      ),
+      body: AppSpinner(),
     );
   }
 }
