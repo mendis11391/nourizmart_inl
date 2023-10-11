@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:nourish_mart/provider/auth_provider.dart';
 import 'package:nourish_mart/screens/register_screen.dart';
+import 'package:nourish_mart/screens/welcome_screen.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: RegisterScreen(),
+        home: WelcomeScreen(),
       ),
     );
   }

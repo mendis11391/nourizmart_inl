@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nourish_mart/model/user_model.dart';
 import 'package:nourish_mart/screens/register_screen.dart';
+import 'package:nourish_mart/widgets/app_spinner.dart';
+import 'package:nourish_mart/widgets/header_options_dropdown.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/auth_provider.dart';
@@ -32,20 +34,24 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Categories'),
+        backgroundColor: Colors.purple,
+        title: const Text('Product'),
         actions: [
-          IconButton(
-            onPressed: signout,
-            icon: const Icon(
-              Icons.exit_to_app,
-              color: Colors.white,
-            ),
-          ),
+          // IconButton(
+          //   onPressed: signout,
+          //   icon: const Icon(
+          //     Icons.exit_to_app,
+          //     color: Colors.white,
+          //   ),
+          // ),
+          HeaderOptionsDropdown(),
         ],
       ),
       body: userData != null
-          ? Text('Welcome, ${userData!.name}')
-          : const CircularProgressIndicator(),
+          ? Center(
+              child: Text('Welcome, ${userData?.name}'),
+            )
+          : const AppSpinner(),
     );
   }
 

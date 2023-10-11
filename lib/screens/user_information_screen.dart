@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nourish_mart/model/user_model.dart';
 import 'package:nourish_mart/provider/auth_provider.dart';
 import 'package:nourish_mart/screens/home_screen.dart';
+import 'package:nourish_mart/widgets/app_spinner.dart';
 import 'package:nourish_mart/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
@@ -33,9 +34,7 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
       body: SafeArea(
         child: isLoading
             ? const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.purple,
-                ),
+                child: AppSpinner(),
               )
             : SingleChildScrollView(
                 padding:

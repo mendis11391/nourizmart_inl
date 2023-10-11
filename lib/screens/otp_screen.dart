@@ -5,6 +5,7 @@ import 'package:nourish_mart/screens/home_screen.dart';
 import 'package:nourish_mart/screens/user_information_screen.dart';
 import 'package:nourish_mart/screens/welcome_screen.dart';
 import 'package:nourish_mart/utils/utils.dart';
+import 'package:nourish_mart/widgets/app_spinner.dart';
 import 'package:nourish_mart/widgets/custom_button.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
@@ -32,9 +33,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.purple,
-                      ),
+                      child: AppSpinner(),
                     ),
                   ],
                 ),
@@ -150,6 +149,7 @@ class _OtpScreenState extends State<OtpScreen> {
           // checking if user exists in DB
           ap.checkExistingUser().then((value) async {
             if (value == true) {
+              ap.setSignIn();
               // user exists
               await Navigator.pushAndRemoveUntil(
                   context,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nourish_mart/model/user_model.dart';
 import 'package:nourish_mart/provider/auth_provider.dart';
-import 'package:nourish_mart/screens/categories_screen.dart';
 import 'package:nourish_mart/screens/home_screen.dart';
+import 'package:nourish_mart/widgets/app_spinner.dart';
 import 'package:nourish_mart/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,24 +18,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final phoneController = TextEditingController();
   UserModel? userData;
   late Future checkUserLoggedIn;
+  bool isLoginClicked = false;
 
   @override
   void initState() {
     super.initState();
-    getUserData();
+    // getUserData();
   }
 
   void getUserData() async {
     final ap = Provider.of<AuthProvider>(context, listen: false);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     final uid = ap.uid;
-    final isUserLoggedIn = ap.checkExistingUser();
     final userData = await ap.getUserDataFromFirestore(uid);
     setState(() {
       this.userData = userData;
       ap.saveUserDataToStProc(userData);
       checkUserLoggedIn = ap.registeredUserLogin();
       checkUserLoggedIn.then((value) async {
-        if (value == true) {
+        if (prefs.getBool('is_signedin') == true) {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -83,9 +84,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                userData != null
-                    ? Text('Welcome, ${userData?.email}')
-                    : const Text(''),
                 const SizedBox(
                   height: 20,
                 ),
@@ -152,8 +150,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 SizedBox(
                   width: double.infinity,
-                  child: CustomButton(
-                      buttonText: 'Login', onPressed: () => sendPhoneNumber()),
+                  child: isLoginClicked
+                      ? const SizedBox(height: 20, child: AppSpinner())
+                      : CustomButton(
+                          buttonText: 'Login',
+                          onPressed: () => sendPhoneNumber()),
                 ),
               ],
             ),
@@ -164,6 +165,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void sendPhoneNumber() {
+    setState(() {
+      isLoginClicked = true;
+    });
     final ap = Provider.of<AuthProvider>(context, listen: false);
     ap.signInWithPhone(context, '+91${phoneController.text}');
   }
