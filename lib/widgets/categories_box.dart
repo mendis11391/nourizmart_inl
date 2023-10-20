@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:nourish_mart/screens/categories_screen.dart";
+import 'package:nourish_mart/screens/vegetables_list_Screen.dart';
 
 class CategoriesBox extends StatelessWidget {
   final String categoryName;
@@ -44,7 +44,7 @@ class CategoriesBox extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CategoriesScreen()),
+          MaterialPageRoute(builder: (context) => VegetablesListScreen()),
         );
       },
       child: Padding(

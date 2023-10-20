@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nourish_mart/provider/auth_provider.dart';
-import 'package:nourish_mart/screens/home_screen.dart';
-import 'package:nourish_mart/screens/user_information_screen.dart';
+import 'package:nourish_mart/screens/categories_screen.dart';
+import 'package:nourish_mart/screens/user_registration_screen.dart';
+import 'package:nourish_mart/utils/theme.dart';
 import 'package:nourish_mart/utils/utils.dart';
 import 'package:nourish_mart/widgets/app_spinner.dart';
 import 'package:nourish_mart/widgets/custom_button.dart';
@@ -66,9 +67,9 @@ class _OtpScreenState extends State<OtpScreen> {
                       ),
                       Container(
                         padding: const EdgeInsets.all(20.0),
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.purple,
+                          color: ThemeColor.primaryColor,
                         ),
                         width: 200,
                         height: 200,
@@ -111,7 +112,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: Colors.purple.shade200,
+                              color: ThemeColor.primaryShade200,
                             ),
                           ),
                           textStyle: const TextStyle(
@@ -151,8 +152,14 @@ class _OtpScreenState extends State<OtpScreen> {
                         padding: const EdgeInsets.only(left: 25, right: 25),
                         child: TextButton(
                             onPressed: resendOtp,
-                            child:
-                                otpResent ? AppSpinner() : Text('Resend OTP')),
+                            child: otpResent
+                                ? AppSpinner()
+                                : Text(
+                                    'Resend OTP',
+                                    style: TextStyle(
+                                        color: ThemeColor.primaryColor,
+                                        fontWeight: FontWeight.bold),
+                                  )),
                       ),
                     ],
                   ),
@@ -178,7 +185,7 @@ class _OtpScreenState extends State<OtpScreen> {
               await Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const HomeScreen(),
+                    builder: (context) => const CategoriesScreen(),
                   ),
                   (route) => false);
             } else {
@@ -186,7 +193,7 @@ class _OtpScreenState extends State<OtpScreen> {
               await Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const UserInformationScreen(),
+                    builder: (context) => const UserRegisterationScreen(),
                   ),
                   (route) => false);
             }

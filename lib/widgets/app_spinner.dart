@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:nourish_mart/utils/theme.dart';
 
 class AppSpinner extends StatelessWidget {
   const AppSpinner({super.key});
@@ -8,9 +9,9 @@ class AppSpinner extends StatelessWidget {
   Widget build(BuildContext context) {
     return SpinKitWave(
       itemBuilder: (BuildContext context, int index) {
-        return const DecoratedBox(
+        return DecoratedBox(
           decoration: BoxDecoration(
-            color: Colors.purple,
+            color: ThemeColor.primaryColor,
           ),
         );
       },

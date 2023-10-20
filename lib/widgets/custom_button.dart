@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nourish_mart/utils/theme.dart';
 
 class CustomButton extends StatelessWidget {
   final String buttonText;
@@ -12,7 +13,7 @@ class CustomButton extends StatelessWidget {
       onPressed: onPressed,
       style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all(Colors.white),
-          backgroundColor: MaterialStateProperty.all(Colors.purple),
+          backgroundColor: MaterialStateProperty.all(ThemeColor.primaryColor),
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
