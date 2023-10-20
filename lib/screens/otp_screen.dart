@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nourish_mart/provider/auth_provider.dart';
-import 'package:nourish_mart/screens/categories_screen.dart';
 import 'package:nourish_mart/screens/home_screen.dart';
 import 'package:nourish_mart/screens/user_information_screen.dart';
-import 'package:nourish_mart/screens/welcome_screen.dart';
 import 'package:nourish_mart/utils/utils.dart';
 import 'package:nourish_mart/widgets/app_spinner.dart';
 import 'package:nourish_mart/widgets/custom_button.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OtpScreen extends StatefulWidget {
   final String verificationId;
@@ -19,6 +18,21 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
+  bool otpResent = false;
+  String? phone = '';
+  @override
+  void initState() {
+    super.initState();
+    triggerOtp();
+  }
+
+  void triggerOtp() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      phone = prefs.getString('phone');
+    });
+  }
+
   String? otpCode;
   @override
   Widget build(BuildContext context) {
@@ -76,9 +90,9 @@ class _OtpScreenState extends State<OtpScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Text(
-                        "Enter the OTP sent to your phone number",
-                        style: TextStyle(
+                      Text(
+                        "Enter the OTP sent to your phone number $phone",
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Colors.black38,
                           fontWeight: FontWeight.bold,
@@ -130,6 +144,16 @@ class _OtpScreenState extends State<OtpScreen> {
                               }),
                         ),
                       ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25, right: 25),
+                        child: TextButton(
+                            onPressed: resendOtp,
+                            child:
+                                otpResent ? AppSpinner() : Text('Resend OTP')),
+                      ),
                     ],
                   ),
                 ),
@@ -168,5 +192,13 @@ class _OtpScreenState extends State<OtpScreen> {
             }
           });
         });
+  }
+
+  void resendOtp() {
+    setState(() {
+      otpResent = true;
+    });
+    final ap = Provider.of<AuthProvider>(context, listen: false);
+    ap.signInWithPhone(context, '$phone');
   }
 }
