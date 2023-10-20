@@ -38,11 +38,14 @@ class AuthProvider extends ChangeNotifier {
     final SharedPreferences s = await SharedPreferences.getInstance();
     s.setBool("is_signedin", true);
     s.setString("uid", _uid);
+    s.setString("phone", _phoneNumber);
     _isSignedIn = true;
     notifyListeners();
   }
 
   void signInWithPhone(BuildContext context, String phoneNumber) async {
+    final SharedPreferences s = await SharedPreferences.getInstance();
+    s.setString("phone", phoneNumber);
     _phoneNumber = phoneNumber;
     try {
       _firebaseAuth.verifyPhoneNumber(
@@ -201,9 +204,5 @@ class AuthProvider extends ChangeNotifier {
       print('Error fetching user data: $e');
       return null;
     }
-  }
-
-  fetchIsSignedIn() {
-    return _isSignedIn;
   }
 }
