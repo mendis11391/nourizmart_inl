@@ -14,15 +14,25 @@ class UserInformationScreen extends StatefulWidget {
 }
 
 class _UserInformationScreenState extends State<UserInformationScreen> {
-  final nameController = TextEditingController();
+  final fnameController = TextEditingController();
+  final lnameController = TextEditingController();
   final emailController = TextEditingController();
+  final addressController = TextEditingController();
+  final stateController = TextEditingController();
+  final cityController = TextEditingController();
+  final pincodeController = TextEditingController();
   final bioController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
-    nameController.dispose();
+    fnameController.dispose();
+    lnameController.dispose();
     emailController.dispose();
+    addressController.dispose();
+    stateController.dispose();
+    cityController.dispose();
+    pincodeController.dispose();
     bioController.dispose();
   }
 
@@ -31,23 +41,34 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
     final isLoading =
         Provider.of<AuthProvider>(context, listen: true).isLoading;
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.purple,
+        title: Text('Add User Details'),
+      ),
       body: SafeArea(
         child: isLoading
             ? const Center(
                 child: AppSpinner(),
               )
             : SingleChildScrollView(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 25.0, horizontal: 5.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 25.0, horizontal: 10.0),
                 child: Center(
                   child: Column(
                     children: [
                       textField(
-                        hintText: 'Name',
+                        hintText: 'First Name',
                         icon: Icons.account_circle,
                         inputType: TextInputType.name,
                         maxLines: 1,
-                        controller: nameController,
+                        controller: fnameController,
+                      ),
+                      textField(
+                        hintText: 'Last Name',
+                        icon: Icons.account_circle,
+                        inputType: TextInputType.name,
+                        maxLines: 1,
+                        controller: lnameController,
                       ),
                       textField(
                         hintText: 'Email',
@@ -55,6 +76,34 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
                         inputType: TextInputType.emailAddress,
                         maxLines: 1,
                         controller: emailController,
+                      ),
+                      textField(
+                        hintText: 'Address',
+                        icon: Icons.location_on_rounded,
+                        inputType: TextInputType.name,
+                        maxLines: 1,
+                        controller: addressController,
+                      ),
+                      textField(
+                        hintText: 'State',
+                        icon: Icons.location_on_rounded,
+                        inputType: TextInputType.name,
+                        maxLines: 1,
+                        controller: stateController,
+                      ),
+                      textField(
+                        hintText: 'City',
+                        icon: Icons.location_city_rounded,
+                        inputType: TextInputType.name,
+                        maxLines: 1,
+                        controller: cityController,
+                      ),
+                      textField(
+                        hintText: 'Pincode',
+                        icon: Icons.location_on_rounded,
+                        inputType: TextInputType.name,
+                        maxLines: 1,
+                        controller: pincodeController,
                       ),
                       const SizedBox(
                         height: 20,
@@ -128,7 +177,7 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
   void storeData() async {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     UserModel userModel = UserModel(
-        name: nameController.text,
+        name: '${fnameController.text} ${lnameController.text}',
         email: emailController.text,
         uid: ap.uid,
         phoneNumber: ap.phoneNumber);

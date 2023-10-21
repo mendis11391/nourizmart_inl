@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
+        color: Colors.purple,
         home: WelcomeScreen(),
       ),
     );
