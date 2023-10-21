@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:nourish_mart/provider/auth_provider.dart';
-import 'package:nourish_mart/screens/register_screen.dart';
 import 'package:nourish_mart/screens/welcome_screen.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +25,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: const MaterialApp(
+        title: 'Nourish Mart',
         debugShowCheckedModeBanner: false,
         color: Colors.purple,
         home: WelcomeScreen(),

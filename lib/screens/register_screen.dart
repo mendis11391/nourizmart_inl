@@ -26,28 +26,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
     // getUserData();
   }
 
-  void getUserData() async {
-    final ap = Provider.of<AuthProvider>(context, listen: false);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final uid = ap.uid;
-    final userData = await ap.getUserDataFromFirestore(uid);
-    setState(() {
-      this.userData = userData;
-      ap.saveUserDataToStProc(userData);
-      checkUserLoggedIn = ap.registeredUserLogin();
-      checkUserLoggedIn.then((value) async {
-        if (prefs.getBool('is_signedin') == true) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
-            ),
-            (route) => false,
-          );
-        }
-      });
-    });
-  }
+  // void getUserData() async {
+  //   final ap = Provider.of<AuthProvider>(context, listen: false);
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   final uid = ap.uid;
+  //   final userData = await ap.getUserDataFromFirestore(uid);
+  //   setState(() {
+  //     this.userData = userData;
+  //     ap.saveUserDataToStProc(userData);
+  //     checkUserLoggedIn = ap.registeredUserLogin();
+  //     checkUserLoggedIn.then((value) async {
+  //       if (prefs.getBool('is_signedin') == true) {
+  //         Navigator.pushAndRemoveUntil(
+  //           context,
+  //           MaterialPageRoute(
+  //             builder: (context) => const HomeScreen(),
+  //           ),
+  //           (route) => false,
+  //         );
+  //       }
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
