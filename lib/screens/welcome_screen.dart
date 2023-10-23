@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nourish_mart/screens/home_screen.dart';
+import 'package:nourish_mart/screens/categories_screen.dart';
 import 'package:nourish_mart/screens/register_screen.dart';
 import 'package:nourish_mart/widgets/app_spinner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +25,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
+            builder: (context) => const CategoriesScreen(),
           ),
           (route) => false,
         );
