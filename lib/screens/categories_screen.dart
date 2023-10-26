@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nourish_mart/model/user_model.dart';
-import 'package:nourish_mart/screens/register_screen.dart';
-import 'package:nourish_mart/widgets/app_spinner.dart';
+import 'package:nourish_mart/provider/auth_provider.dart';
+import 'package:nourish_mart/utils/theme.dart';
+import 'package:nourish_mart/widgets/categories_box.dart';
 import 'package:nourish_mart/widgets/header_options_dropdown.dart';
 import 'package:provider/provider.dart';
-
-import '../provider/auth_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CategoriesScreen extends StatefulWidget {
   final String categoryName;
@@ -17,54 +17,84 @@ class CategoriesScreen extends StatefulWidget {
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
   UserModel? userData;
-  @override
-  void initState() {
-    super.initState();
-    getUserData();
-  }
-
-  void getUserData() async {
-    final ap = Provider.of<AuthProvider>(context, listen: false);
-    final userData = await ap.getUserDataFromSP();
-    setState(() {
-      this.userData = userData;
-    });
-  }
+  List allCategories = [
+    [
+      "Vegitables",
+      "assets/images/categories/vegitables_sm.png",
+      150.0,
+      200.0,
+      'categories'
+    ],
+    [
+      "Milk",
+      "assets/images/categories/milk_pack_sm.png",
+      150.0,
+      100.0,
+      'categories'
+    ],
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.purple,
-        title: Text('${widget.categoryName}'),
+        backgroundColor: ThemeColor.primaryColor,
+        title: Text("Categories"),
         actions: [
-          // IconButton(
-          //   onPressed: signout,
-          //   icon: const Icon(
-          //     Icons.exit_to_app,
-          //     color: Colors.white,
-          //   ),
-          // ),
           HeaderOptionsDropdown(),
         ],
       ),
-      body: userData != null
-          ? Center(
-              child:
-                  Text('Welcome, ${userData?.firstName} ${userData?.lastName}'),
-            )
-          : const AppSpinner(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(10, 20, 0, 20),
+            child: Text(
+              "Welcome, ${userData?.firstName} ${userData?.lastName}",
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: GridView.builder(
+              itemCount: allCategories.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2),
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: CategoriesBox(
+                    categoryName: allCategories[index][0],
+                    imagePath: allCategories[index][1],
+                    width: allCategories[index][2],
+                    height: allCategories[index][3],
+                    widgetName: allCategories[index][4],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  void signout() async {
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  _load() async {
     final ap = Provider.of<AuthProvider>(context, listen: false);
-    ap.signout();
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const RegisterScreen(),
-        ),
-        (route) => false);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? uid = prefs.getString('uid');
+    final userData = await ap.getUserDataFromFirestore(uid!);
+    setState(() {
+      this.userData = userData;
+      ap.saveUserDataToStProc(userData);
+    });
   }
 }
