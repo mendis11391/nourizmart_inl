@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nourish_mart/model/user_model.dart';
+import 'package:nourish_mart/model/user_register_model.dart';
 import 'package:nourish_mart/provider/auth_provider.dart';
 import 'package:nourish_mart/utils/theme.dart';
 import 'package:nourish_mart/widgets/categories_box.dart';
@@ -15,7 +16,7 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-  UserModel? userData;
+  UserRegisterModel? userData;
   List allCategories = [
     [
       "Vegitables",
@@ -90,10 +91,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? uid = prefs.getString('uid');
-    final userData = await ap.getUserDataFromFirestore(uid!);
-    setState(() {
-      this.userData = userData;
-      ap.saveUserDataToStProc(userData);
-    });
+    await ap.getUserData(uid!).then((value) => {
+          setState(() {
+            this.userData = value;
+            ap.saveUserDataToStProc(value);
+          })
+        });
   }
 }

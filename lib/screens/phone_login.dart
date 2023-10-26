@@ -6,14 +6,14 @@ import 'package:nourish_mart/widgets/app_spinner.dart';
 import 'package:nourish_mart/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class PhoneLoginScreen extends StatefulWidget {
+  const PhoneLoginScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<PhoneLoginScreen> createState() => _PhoneLoginScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   final phoneController = TextEditingController();
   UserModel? userData;
   late Future checkUserLoggedIn;

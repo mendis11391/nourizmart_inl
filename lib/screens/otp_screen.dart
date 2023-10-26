@@ -9,6 +9,7 @@ import 'package:nourish_mart/widgets/custom_button.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
 
 class OtpScreen extends StatefulWidget {
   final String verificationId;
@@ -172,13 +173,13 @@ class _OtpScreenState extends State<OtpScreen> {
   // Verify OTP
   void verifyOtp(BuildContext context, String userOtp) {
     final ap = Provider.of<AuthProvider>(context, listen: false);
+    final dio = Dio();
     ap.verifyOtp(
         context: context,
         verificationId: widget.verificationId,
         userOtp: userOtp,
         onSuccess: () {
-          // checking if user exists in DB
-          ap.checkExistingUser().then((value) async {
+          ap.checkIfUserExists().then((value) async {
             if (value == true) {
               ap.setSignIn();
               // user exists
@@ -198,6 +199,29 @@ class _OtpScreenState extends State<OtpScreen> {
                   (route) => false);
             }
           });
+          // checking if user exists in DB
+          // ap.checkExistingUser().then(
+          //   (value) async {
+          //     if (value == true) {
+          //       ap.setSignIn();
+          //       // user exists
+          //       await Navigator.pushAndRemoveUntil(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (context) => const CategoriesScreen(),
+          //           ),
+          //           (route) => false);
+          //     } else {
+          //       // new user
+          //       await Navigator.pushAndRemoveUntil(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (context) => const UserRegisterationScreen(),
+          //           ),
+          //           (route) => false);
+          //     }
+          //   },
+          // );
         });
   }
 
