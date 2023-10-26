@@ -8,7 +8,8 @@ import 'package:provider/provider.dart';
 import '../provider/auth_provider.dart';
 
 class CategoriesScreen extends StatefulWidget {
-  const CategoriesScreen({super.key});
+  final String categoryName;
+  const CategoriesScreen({super.key, required this.categoryName});
 
   @override
   State<CategoriesScreen> createState() => _CategoriesScreenState();
@@ -35,7 +36,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple,
-        title: const Text('Product'),
+        title: Text('${widget.categoryName}'),
         actions: [
           // IconButton(
           //   onPressed: signout,
@@ -49,7 +50,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       ),
       body: userData != null
           ? Center(
-              child: Text('Welcome, ${userData?.name}'),
+              child:
+                  Text('Welcome, ${userData?.firstName} ${userData?.lastName}'),
             )
           : const AppSpinner(),
     );

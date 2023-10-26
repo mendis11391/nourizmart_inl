@@ -44,7 +44,9 @@ class CategoriesBox extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CategoriesScreen()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  CategoriesScreen(categoryName: categoryName)),
         );
       },
       child: Padding(

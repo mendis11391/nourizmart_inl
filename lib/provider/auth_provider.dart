@@ -15,8 +15,20 @@ class AuthProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String _uid = '';
   String get uid => _uid;
-  UserModel _userModel =
-      UserModel(name: '', email: '', uid: '', phoneNumber: '');
+  UserModel _userModel = UserModel(
+    uid: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    state: '',
+    district: '',
+    taluk: '',
+    area: '',
+    pincode: '',
+    landmark: '',
+    address: '',
+  );
   UserModel get userModel => _userModel;
   String _phoneNumber = '';
   String get phoneNumber => _phoneNumber;
