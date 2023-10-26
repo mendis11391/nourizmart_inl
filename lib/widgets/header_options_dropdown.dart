@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nourish_mart/provider/auth_provider.dart';
 import 'package:nourish_mart/screens/register_screen.dart';
+import 'package:nourish_mart/utils/theme.dart';
 import 'package:provider/provider.dart';
 
 class HeaderOptionsDropdown extends StatelessWidget {
@@ -33,16 +34,16 @@ class HeaderOptionsDropdown extends StatelessWidget {
             (BuildContext context) {
               return Container(
                 height: height,
-                color: Colors.amber,
+                color: ThemeColor.primaryShade100,
                 child: Center(
                   child: Column(
                     children: <Widget>[
                       Align(
                         alignment: Alignment.topRight,
                         child: IconButton(
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.cancel,
-                            color: Colors.purple,
+                            color: ThemeColor.whiteColor,
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -56,6 +57,9 @@ class HeaderOptionsDropdown extends StatelessWidget {
                             shrinkWrap: true,
                             children: <Widget>[
                               ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: ThemeColor.primaryColor,
+                                ),
                                 onPressed: () => {},
                                 child: const Column(
                                   children: <Widget>[
@@ -72,6 +76,9 @@ class HeaderOptionsDropdown extends StatelessWidget {
                                 ),
                               ),
                               ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: ThemeColor.primaryColor,
+                                ),
                                 onPressed: signout,
                                 child: const Column(
                                   children: <Widget>[
