@@ -14,26 +14,30 @@ class UserInformationScreen extends StatefulWidget {
 }
 
 class _UserInformationScreenState extends State<UserInformationScreen> {
-  final fnameController = TextEditingController();
-  final lnameController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
   final emailController = TextEditingController();
   final addressController = TextEditingController();
   final stateController = TextEditingController();
-  final cityController = TextEditingController();
+  final districtController = TextEditingController();
+  final talukController = TextEditingController();
+  final areaController = TextEditingController();
   final pincodeController = TextEditingController();
-  final bioController = TextEditingController();
+  final landmarkController = TextEditingController();
 
   @override
   void dispose() {
-    super.dispose();
-    fnameController.dispose();
-    lnameController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
     emailController.dispose();
     addressController.dispose();
     stateController.dispose();
-    cityController.dispose();
+    districtController.dispose();
+    talukController.dispose();
+    areaController.dispose();
     pincodeController.dispose();
-    bioController.dispose();
+    landmarkController.dispose();
+    super.dispose();
   }
 
   @override
@@ -61,14 +65,14 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
                         icon: Icons.account_circle,
                         inputType: TextInputType.name,
                         maxLines: 1,
-                        controller: fnameController,
+                        controller: firstNameController,
                       ),
                       textField(
                         hintText: 'Last Name',
                         icon: Icons.account_circle,
                         inputType: TextInputType.name,
                         maxLines: 1,
-                        controller: lnameController,
+                        controller: lastNameController,
                       ),
                       textField(
                         hintText: 'Email',
@@ -78,32 +82,53 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
                         controller: emailController,
                       ),
                       textField(
-                        hintText: 'Address',
-                        icon: Icons.location_on_rounded,
+                        hintText: 'address',
+                        icon: Icons.account_circle,
                         inputType: TextInputType.name,
-                        maxLines: 1,
+                        maxLines: 8,
                         controller: addressController,
                       ),
                       textField(
-                        hintText: 'State',
-                        icon: Icons.location_on_rounded,
+                        hintText: 'state',
+                        icon: Icons.account_circle,
                         inputType: TextInputType.name,
                         maxLines: 1,
                         controller: stateController,
                       ),
                       textField(
-                        hintText: 'City',
-                        icon: Icons.location_city_rounded,
+                        hintText: 'district',
+                        icon: Icons.account_circle,
                         inputType: TextInputType.name,
                         maxLines: 1,
-                        controller: cityController,
+                        controller: districtController,
                       ),
                       textField(
-                        hintText: 'Pincode',
-                        icon: Icons.location_on_rounded,
+                        hintText: 'taluk',
+                        icon: Icons.account_circle,
+                        inputType: TextInputType.name,
+                        maxLines: 1,
+                        controller: talukController,
+                      ),
+                      textField(
+                        hintText: 'area',
+                        icon: Icons.account_circle,
+                        inputType: TextInputType.name,
+                        maxLines: 1,
+                        controller: areaController,
+                      ),
+                      textField(
+                        hintText: 'pincode',
+                        icon: Icons.account_circle,
                         inputType: TextInputType.name,
                         maxLines: 1,
                         controller: pincodeController,
+                      ),
+                      textField(
+                        hintText: 'landmark',
+                        icon: Icons.account_circle,
+                        inputType: TextInputType.name,
+                        maxLines: 1,
+                        controller: landmarkController,
                       ),
                       const SizedBox(
                         height: 20,
@@ -177,10 +202,19 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
   void storeData() async {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     UserModel userModel = UserModel(
-        name: '${fnameController.text} ${lnameController.text}',
-        email: emailController.text,
-        uid: ap.uid,
-        phoneNumber: ap.phoneNumber);
+      firstName: firstNameController.text,
+      lastName: lastNameController.text,
+      email: emailController.text,
+      uid: ap.uid,
+      phoneNumber: ap.phoneNumber,
+      state: stateController.text,
+      district: districtController.text,
+      taluk: talukController.text,
+      area: areaController.text,
+      pincode: pincodeController.text,
+      landmark: landmarkController.text,
+      address: addressController.text,
+    );
     ap.saveUserDataToFireBase(
         context: context,
         userModel: userModel,

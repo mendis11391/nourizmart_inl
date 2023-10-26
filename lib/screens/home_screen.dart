@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   UserModel? userData;
   List allCategories = [
     [
-      "Vegitables",
+      "Vegetables",
       "assets/images/categories/vegitables_sm.png",
       150.0,
       200.0,
@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.purple,
-        title: Text('${userData?.name}'),
+        title: Text('Home'),
         actions: [
           // IconButton(
           //   onPressed: signout,
