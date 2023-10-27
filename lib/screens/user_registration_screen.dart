@@ -139,10 +139,11 @@ class _UserRegisterationScreenState extends State<UserRegisterationScreen> {
                         height: 50,
                         width: MediaQuery.of(context).size.width * 0.80,
                         child: CustomButton(
-                            buttonText: 'Continue',
-                            onPressed: () {
-                              storeData();
-                            }),
+                          buttonText: 'Continue',
+                          onPressed: () {
+                            storeData();
+                          },
+                        ),
                       ),
                     ],
                   ),
@@ -201,6 +202,39 @@ class _UserRegisterationScreenState extends State<UserRegisterationScreen> {
   }
 
   // Store user data to DB
+  // void storeData() async {
+  //   final ap = Provider.of<AuthProvider>(context, listen: false);
+  //   UserModel userModel = UserModel(
+  //     firstName: firstNameController.text,
+  //     lastName: lastNameController.text,
+  //     email: emailController.text,
+  //     uid: ap.uid,
+  //     phoneNumber: ap.phoneNumber,
+  //     state: stateController.text,
+  //     district: districtController.text,
+  //     taluk: talukController.text,
+  //     area: areaController.text,
+  //     pincode: pincodeController.text,
+  //     landmark: landmarkController.text,
+  //     address: addressController.text,
+  //   );
+  //   ap.saveUserDataToFireBase(
+  //       context: context,
+  //       userModel: userModel,
+  //       onSuccess: () {
+  //         ap.saveUserDataToSP().then(
+  //               (value) => ap.setSignIn().then(
+  //                     (value) => Navigator.pushAndRemoveUntil(
+  //                         context,
+  //                         MaterialPageRoute(
+  //                           builder: (context) => const CategoriesScreen(),
+  //                         ),
+  //                         (route) => false),
+  //                   ),
+  //             );
+  //       });
+  // }
+
   void storeData() async {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     UserModel userModel = UserModel(
@@ -217,20 +251,15 @@ class _UserRegisterationScreenState extends State<UserRegisterationScreen> {
       landmark: landmarkController.text,
       address: addressController.text,
     );
-    ap.saveUserDataToFireBase(
-        context: context,
-        userModel: userModel,
-        onSuccess: () {
-          ap.saveUserDataToSP().then(
-                (value) => ap.setSignIn().then(
-                      (value) => Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CategoriesScreen(),
-                          ),
-                          (route) => false),
+    ap.registerUser(context, userModel).then(
+          (value) => ap.setSignIn().then(
+                (value) => Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CategoriesScreen(),
                     ),
-              );
-        });
+                    (route) => false),
+              ),
+        );
   }
 }
