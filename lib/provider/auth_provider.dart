@@ -34,7 +34,6 @@ class AuthProvider extends ChangeNotifier {
   );
   UserModel get userModel => _userModel;
   UserRegisterModel _userRegisterModel = UserRegisterModel(
-    nourishmartId: 0,
     firebaseId: '',
     firstName: '',
     lastName: '',
@@ -42,11 +41,9 @@ class AuthProvider extends ChangeNotifier {
     email: '',
     state: '',
     district: '',
-    taluk: '',
     area: '',
     pincode: 0,
     landmark: '',
-    address: '',
   );
   UserRegisterModel get userRegisterModel => _userRegisterModel;
   String _phoneNumber = '';
@@ -148,14 +145,20 @@ class AuthProvider extends ChangeNotifier {
     final SharedPreferences s = await SharedPreferences.getInstance();
     final String? savedUid = this._uid ?? s.getString(uid);
     final dio = Dio();
-    final response =
-        await dio.get('${AppEndpointURLs.serverUrl}/checkUserExists/$savedUid');
+    final response = await dio
+        .get('${AppEndpointURLs.serverUrl}/customer/customerExists/$savedUid');
+    final data = response.data;
     if (response.statusCode == 200) {
-      final data = response.data;
-      final bool userExists = data['exists'];
-      if (userExists) {
-        return true;
+      if (data.containsKey('exists')) {
+        final data = response.data;
+        final bool userExists = data['exists'];
+        if (userExists) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
+        // New user
         return false;
       }
     } else {
@@ -303,11 +306,15 @@ class AuthProvider extends ChangeNotifier {
     try {
       final dio = Dio();
       //dynamic -> when we are not sure which type of data might come
-      dynamic response = await dio.get('${AppEndpointURLs.serverUrl}/$uid');
+      dynamic response = await dio
+          .get('${AppEndpointURLs.serverUrl}/customer/customerInfo/$uid');
       //final -> Assuming the data will definatily there.
       if (response != null) {
-        UserRegisterModel resp = UserRegisterModel.fromJson(response.data);
-        return resp;
+        // final data = response.data;
+        final List<dynamic> responseData = response.data;
+        final Map<String, dynamic> data = responseData[0];
+        // UserRegisterModel resp = data;
+        return data;
       } else {
         return null;
       }
