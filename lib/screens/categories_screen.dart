@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nourish_mart/model/user_model.dart';
+import 'package:nourish_mart/model/user_register_model.dart';
 import 'package:nourish_mart/provider/auth_provider.dart';
 import 'package:nourish_mart/utils/theme.dart';
 import 'package:nourish_mart/widgets/categories_box.dart';
@@ -8,15 +9,14 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CategoriesScreen extends StatefulWidget {
-  final String categoryName;
-  const CategoriesScreen({super.key, required this.categoryName});
+  const CategoriesScreen({super.key});
 
   @override
   State<CategoriesScreen> createState() => _CategoriesScreenState();
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-  UserModel? userData;
+  UserRegisterModel? userData;
   List allCategories = [
     [
       "Vegitables",
@@ -91,10 +91,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? uid = prefs.getString('uid');
-    final userData = await ap.getUserDataFromFirestore(uid!);
-    setState(() {
-      this.userData = userData;
-      ap.saveUserDataToStProc(userData);
-    });
+    await ap.getUserData(uid!).then((value) => {
+          setState(() {
+            this.userData = value;
+            ap.saveUserDataToStProc(value);
+          })
+        });
   }
 }

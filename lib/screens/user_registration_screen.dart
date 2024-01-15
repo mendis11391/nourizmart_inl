@@ -84,49 +84,49 @@ class _UserRegisterationScreenState extends State<UserRegisterationScreen> {
                         controller: emailController,
                       ),
                       textField(
-                        hintText: 'state',
+                        hintText: 'State',
                         icon: Icons.account_circle,
                         inputType: TextInputType.name,
                         maxLines: 1,
                         controller: stateController,
                       ),
                       textField(
-                        hintText: 'district',
+                        hintText: 'District',
                         icon: Icons.account_circle,
                         inputType: TextInputType.name,
                         maxLines: 1,
                         controller: districtController,
                       ),
                       textField(
-                        hintText: 'taluk',
+                        hintText: 'Taluk',
                         icon: Icons.account_circle,
                         inputType: TextInputType.name,
                         maxLines: 1,
                         controller: talukController,
                       ),
                       textField(
-                        hintText: 'area',
+                        hintText: 'Area',
                         icon: Icons.account_circle,
                         inputType: TextInputType.name,
                         maxLines: 1,
                         controller: areaController,
                       ),
                       textField(
-                        hintText: 'pincode',
+                        hintText: 'Pincode',
                         icon: Icons.account_circle,
                         inputType: TextInputType.name,
                         maxLines: 1,
                         controller: pincodeController,
                       ),
                       textField(
-                        hintText: 'landmark',
+                        hintText: 'Landmark',
                         icon: Icons.account_circle,
                         inputType: TextInputType.name,
                         maxLines: 1,
                         controller: landmarkController,
                       ),
                       textField(
-                        hintText: 'address',
+                        hintText: 'Address',
                         icon: Icons.account_circle,
                         inputType: TextInputType.name,
                         maxLines: 8,
@@ -139,10 +139,11 @@ class _UserRegisterationScreenState extends State<UserRegisterationScreen> {
                         height: 50,
                         width: MediaQuery.of(context).size.width * 0.80,
                         child: CustomButton(
-                            buttonText: 'Continue',
-                            onPressed: () {
-                              storeData();
-                            }),
+                          buttonText: 'Continue',
+                          onPressed: () {
+                            storeData();
+                          },
+                        ),
                       ),
                     ],
                   ),
@@ -201,6 +202,39 @@ class _UserRegisterationScreenState extends State<UserRegisterationScreen> {
   }
 
   // Store user data to DB
+  // void storeData() async {
+  //   final ap = Provider.of<AuthProvider>(context, listen: false);
+  //   UserModel userModel = UserModel(
+  //     firstName: firstNameController.text,
+  //     lastName: lastNameController.text,
+  //     email: emailController.text,
+  //     uid: ap.uid,
+  //     phoneNumber: ap.phoneNumber,
+  //     state: stateController.text,
+  //     district: districtController.text,
+  //     taluk: talukController.text,
+  //     area: areaController.text,
+  //     pincode: pincodeController.text,
+  //     landmark: landmarkController.text,
+  //     address: addressController.text,
+  //   );
+  //   ap.saveUserDataToFireBase(
+  //       context: context,
+  //       userModel: userModel,
+  //       onSuccess: () {
+  //         ap.saveUserDataToSP().then(
+  //               (value) => ap.setSignIn().then(
+  //                     (value) => Navigator.pushAndRemoveUntil(
+  //                         context,
+  //                         MaterialPageRoute(
+  //                           builder: (context) => const CategoriesScreen(),
+  //                         ),
+  //                         (route) => false),
+  //                   ),
+  //             );
+  //       });
+  // }
+
   void storeData() async {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     UserModel userModel = UserModel(
@@ -217,20 +251,15 @@ class _UserRegisterationScreenState extends State<UserRegisterationScreen> {
       landmark: landmarkController.text,
       address: addressController.text,
     );
-    ap.saveUserDataToFireBase(
-        context: context,
-        userModel: userModel,
-        onSuccess: () {
-          ap.saveUserDataToSP().then(
-                (value) => ap.setSignIn().then(
-                      (value) => Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CategoriesScreen(),
-                          ),
-                          (route) => false),
+    ap.registerUser(context, userModel).then(
+          (value) => ap.setSignIn().then(
+                (value) => Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CategoriesScreen(),
                     ),
-              );
-        });
+                    (route) => false),
+              ),
+        );
   }
 }

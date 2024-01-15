@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nourish_mart/model/user_model.dart';
-import 'package:nourish_mart/screens/register_screen.dart';
+import 'package:nourish_mart/model/user_register_model.dart';
+import 'package:nourish_mart/screens/phone_login.dart';
 import 'package:nourish_mart/utils/theme.dart';
 import 'package:nourish_mart/widgets/app_spinner.dart';
 import 'package:nourish_mart/widgets/header_options_dropdown.dart';
@@ -16,7 +17,7 @@ class VegetablesListScreen extends StatefulWidget {
 }
 
 class _VegetablesListScreenState extends State<VegetablesListScreen> {
-  UserModel? userData;
+  UserRegisterModel? userData;
   @override
   void initState() {
     super.initState();
@@ -63,7 +64,7 @@ class _VegetablesListScreenState extends State<VegetablesListScreen> {
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => const RegisterScreen(),
+          builder: (context) => const PhoneLoginScreen(),
         ),
         (route) => false);
   }

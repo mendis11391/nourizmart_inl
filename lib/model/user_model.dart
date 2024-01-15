@@ -1,4 +1,5 @@
 class UserModel {
+  num? nourishmartId;
   String uid;
   String firstName;
   String lastName;
@@ -48,6 +49,7 @@ class UserModel {
 // To server
   Map<String, dynamic> toMap() {
     return {
+      "nourishmartId": nourishmartId,
       "uid": uid,
       "firstName": firstName,
       "lastName": lastName,
