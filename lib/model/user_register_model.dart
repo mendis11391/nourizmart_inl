@@ -11,43 +11,53 @@ String userRegisterModelToJson(UserRegisterModel data) =>
     json.encode(data.toJson());
 
 class UserRegisterModel {
-  String firebaseId;
-  String firstName;
-  String lastName;
-  String mobile;
-  String email;
-  String state;
-  String district;
-  String area;
-  int pincode;
-  String landmark;
+  dynamic firebaseId;
+  dynamic firstName;
+  dynamic lastName;
+  dynamic mobile;
+  dynamic email;
+  dynamic houseNo;
+  dynamic street;
+  dynamic stateId;
+  dynamic districtId;
+  dynamic pincodeId;
+  dynamic areaId;
+  dynamic landmark;
+  dynamic isActive;
+  dynamic createdBy;
 
-  UserRegisterModel({
-    required this.firebaseId,
-    required this.firstName,
-    required this.lastName,
-    required this.mobile,
-    required this.email,
-    required this.state,
-    required this.district,
-    required this.area,
-    required this.pincode,
-    required this.landmark,
-  });
+  UserRegisterModel(
+      {required this.firebaseId,
+      required this.firstName,
+      required this.lastName,
+      required this.mobile,
+      required this.email,
+      required this.houseNo,
+      required this.street,
+      required this.stateId,
+      required this.districtId,
+      required this.pincodeId,
+      required this.areaId,
+      required this.landmark,
+      required this.isActive,
+      required this.createdBy});
 
   factory UserRegisterModel.fromJson(Map<String, dynamic> json) =>
       UserRegisterModel(
-        firebaseId: json["firebaseId"],
-        firstName: json["first_name"],
-        lastName: json["last_name"],
-        mobile: json["mobile"],
-        email: json["email"],
-        state: json["state"],
-        district: json["district"],
-        area: json["area"],
-        pincode: json["pincode"],
-        landmark: json["landmark"],
-      );
+          firebaseId: json["firebaseId"],
+          firstName: json["first_name"],
+          lastName: json["last_name"],
+          mobile: json["mobile"],
+          email: json["email"],
+          houseNo: json["house_no"],
+          street: json["street"],
+          stateId: json["stateId"],
+          districtId: json["districtId"],
+          pincodeId: json["pincodeId"],
+          areaId: json["areaId"],
+          landmark: json["landmark"],
+          isActive: json["is_active"],
+          createdBy: json["createdBy"]);
 
   Map<String, dynamic> toJson() => {
         "firebaseId": firebaseId,
@@ -55,10 +65,14 @@ class UserRegisterModel {
         "last_name": lastName,
         "mobile": mobile,
         "email": email,
-        "state": state,
-        "district": district,
-        "area": area,
-        "pincode": pincode,
+        "house_no": houseNo,
+        "street": street,
+        "stateId": stateId,
+        "districtId": districtId,
+        "pincodeId": pincodeId,
+        "areaId": areaId,
         "landmark": landmark,
+        "is_active": isActive,
+        "createdBy": createdBy
       };
 }

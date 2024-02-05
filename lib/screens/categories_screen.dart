@@ -90,7 +90,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   _load() async {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? uid = prefs.getString('uid');
+    final String? uid = prefs.getString('firebaseId');
     await ap.getUserData(uid!).then((value) => {
           setState(() {
             this.userData = value;

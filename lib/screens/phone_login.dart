@@ -17,7 +17,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   final phoneController = TextEditingController();
   UserModel? userData;
   late Future checkUserLoggedIn;
-  bool isLoginClicked = false;
+  // bool isLoginClicked = false;
 
   @override
   void initState() {
@@ -51,6 +51,8 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   @override
   Widget build(BuildContext context) {
     var pageHeight = MediaQuery.of(context).size.height;
+    final isSendOTPLoading =
+        Provider.of<AuthProvider>(context, listen: true).isSendOTPLoading;
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -150,7 +152,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: isLoginClicked
+                    child: /*isLoginClicked*/ isSendOTPLoading
                         ? const SizedBox(height: 20, child: AppSpinner())
                         : CustomButton(
                             buttonText: 'Login',
@@ -166,10 +168,10 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   }
 
   void sendPhoneNumber() {
-    setState(() {
-      isLoginClicked = true;
-    });
+    // setState(() {
+    //   isLoginClicked = true;
+    // });
     final ap = Provider.of<AuthProvider>(context, listen: false);
-    ap.signInWithPhone(context, '+91${phoneController.text}');
+    ap.signInWithPhone(context, '+91${phoneController.text}', false);
   }
 }
