@@ -20,7 +20,7 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  bool otpResent = false;
+  // bool otpResent = false;
   String? phone = '';
   @override
   void initState() {
@@ -40,6 +40,8 @@ class _OtpScreenState extends State<OtpScreen> {
   Widget build(BuildContext context) {
     final isLoading =
         Provider.of<AuthProvider>(context, listen: true).isLoading;
+    final isResendOTPLoading =
+        Provider.of<AuthProvider>(context, listen: true).isResendOTPLoading;
     return Scaffold(
       body: SingleChildScrollView(
         child: isLoading
@@ -135,15 +137,18 @@ class _OtpScreenState extends State<OtpScreen> {
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width,
                           height: 50,
-                          child: CustomButton(
-                              buttonText: 'Verify',
-                              onPressed: () {
-                                if (otpCode != null) {
-                                  verifyOtp(context, otpCode!);
-                                } else {
-                                  showSnackBar(context, "Enter 6-Digit code");
-                                }
-                              }),
+                          child: isLoading
+                              ? AppSpinner()
+                              : CustomButton(
+                                  buttonText: 'Verify',
+                                  onPressed: () {
+                                    if (otpCode != null) {
+                                      verifyOtp(context, otpCode!);
+                                    } else {
+                                      showSnackBar(
+                                          context, "Enter 6-Digit code");
+                                    }
+                                  }),
                         ),
                       ),
                       const SizedBox(
@@ -153,7 +158,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         padding: const EdgeInsets.only(left: 25, right: 25),
                         child: TextButton(
                             onPressed: resendOtp,
-                            child: otpResent
+                            child: isResendOTPLoading
                                 ? AppSpinner()
                                 : Text(
                                     'Resend OTP',
@@ -173,7 +178,6 @@ class _OtpScreenState extends State<OtpScreen> {
   // Verify OTP
   void verifyOtp(BuildContext context, String userOtp) {
     final ap = Provider.of<AuthProvider>(context, listen: false);
-    final dio = Dio();
     ap.verifyOtp(
         context: context,
         verificationId: widget.verificationId,
@@ -226,10 +230,10 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void resendOtp() {
-    setState(() {
-      otpResent = true;
-    });
+    // setState(() {
+    //   otpResent = true;
+    // });
     final ap = Provider.of<AuthProvider>(context, listen: false);
-    ap.signInWithPhone(context, '$phone');
+    ap.signInWithPhone(context, '$phone', true);
   }
 }

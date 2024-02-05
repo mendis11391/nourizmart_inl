@@ -17,10 +17,10 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
-  final addressController = TextEditingController();
+  final houseNoController = TextEditingController();
+  final streetController = TextEditingController();
   final stateController = TextEditingController();
   final districtController = TextEditingController();
-  final talukController = TextEditingController();
   final areaController = TextEditingController();
   final pincodeController = TextEditingController();
   final landmarkController = TextEditingController();
@@ -30,10 +30,10 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
     firstNameController.dispose();
     lastNameController.dispose();
     emailController.dispose();
-    addressController.dispose();
+    houseNoController.dispose();
+    streetController.dispose();
     stateController.dispose();
     districtController.dispose();
-    talukController.dispose();
     areaController.dispose();
     pincodeController.dispose();
     landmarkController.dispose();
@@ -82,19 +82,26 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
                         controller: emailController,
                       ),
                       textField(
-                        hintText: 'address',
-                        icon: Icons.account_circle,
-                        inputType: TextInputType.name,
-                        maxLines: 8,
-                        controller: addressController,
-                      ),
-                      textField(
-                        hintText: 'state',
+                        hintText: 'House No',
                         icon: Icons.account_circle,
                         inputType: TextInputType.name,
                         maxLines: 1,
-                        controller: stateController,
+                        controller: houseNoController,
                       ),
+                      textField(
+                        hintText: 'Street',
+                        icon: Icons.account_circle,
+                        inputType: TextInputType.name,
+                        maxLines: 1,
+                        controller: streetController,
+                      ),
+                      textField(
+                          hintText: 'state',
+                          icon: Icons.account_circle,
+                          inputType: TextInputType.name,
+                          maxLines: 1,
+                          controller: stateController,
+                          suffixIcon: Icons.keyboard_arrow_down),
                       textField(
                         hintText: 'district',
                         icon: Icons.account_circle,
@@ -103,11 +110,11 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
                         controller: districtController,
                       ),
                       textField(
-                        hintText: 'taluk',
+                        hintText: 'pincode',
                         icon: Icons.account_circle,
                         inputType: TextInputType.name,
                         maxLines: 1,
-                        controller: talukController,
+                        controller: pincodeController,
                       ),
                       textField(
                         hintText: 'area',
@@ -115,13 +122,6 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
                         inputType: TextInputType.name,
                         maxLines: 1,
                         controller: areaController,
-                      ),
-                      textField(
-                        hintText: 'pincode',
-                        icon: Icons.account_circle,
-                        inputType: TextInputType.name,
-                        maxLines: 1,
-                        controller: pincodeController,
                       ),
                       textField(
                         hintText: 'landmark',
@@ -155,7 +155,8 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
       required IconData icon,
       required TextInputType inputType,
       required int maxLines,
-      required TextEditingController controller}) {
+      required TextEditingController controller,
+      IconData? suffixIcon}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: TextFormField(
@@ -176,6 +177,20 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
               color: Colors.white,
             ),
           ),
+          suffixIcon: suffixIcon != null
+              ? Container(
+                  margin: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.purple,
+                  ),
+                  child: Icon(
+                    suffixIcon,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                )
+              : null,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: const BorderSide(
@@ -202,19 +217,20 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
   void storeData() async {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     UserModel userModel = UserModel(
-      firstName: firstNameController.text,
-      lastName: lastNameController.text,
-      email: emailController.text,
-      uid: ap.uid,
-      phoneNumber: ap.phoneNumber,
-      state: stateController.text,
-      district: districtController.text,
-      taluk: talukController.text,
-      area: areaController.text,
-      pincode: pincodeController.text,
-      landmark: landmarkController.text,
-      address: addressController.text,
-    );
+        firebaseId: ap.firebaseId,
+        firstName: firstNameController.text,
+        lastName: lastNameController.text,
+        mobile: ap.mobile,
+        email: emailController.text,
+        houseNo: houseNoController.text,
+        street: streetController.text,
+        stateId: stateController.text,
+        districtId: districtController.text,
+        pincodeId: pincodeController.text,
+        areaId: areaController.text,
+        landmark: landmarkController.text,
+        isActive: 'Y',
+        createdBy: 'User');
     ap.saveUserDataToFireBase(
         context: context,
         userModel: userModel,
