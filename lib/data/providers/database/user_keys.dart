@@ -12,4 +12,6 @@ class UserKeys {
   static const String userMobileStr = 'ums';
   static const String userVerificationIdStr = 'uvi_s';
   static const String firebaseIdStr = 'fbi_s';
+  static const String whichDeliveryInt = 'wdi';
+  static const String whereFromAddressStr = 'wfa';
 }

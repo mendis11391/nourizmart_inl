@@ -1,4 +1,4 @@
-import 'package:nourish_mart/presentation/pages/auth/splash/splash_page.dart';
+import 'package:nourish_mart/presentation/pages/splash/splash_page.dart';
 
 import 'app/utils/app_export.dart';
 import 'presentation/nourish_mart_app.dart';

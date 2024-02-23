@@ -13,8 +13,6 @@ class RegisterController extends GetxController {
       area = ''.obs,
       land = ''.obs,
       showLoadingStyle = ApiCallLoadingTypeEnum.none.obs;
-  late AppRepo appRepo;
-  late ScrollController scrollController;
   late TextEditingController fnController,
       lnController,
       mobController,
@@ -35,6 +33,9 @@ class RegisterController extends GetxController {
       pincodeFocusNode,
       areaFocusNode,
       landFocusNode;
+  late AppRepo appRepo;
+  late ScrollController scrollController;
+  final registerFormKey = GlobalKey<FormState>();
 
   @override
   void onInit() {

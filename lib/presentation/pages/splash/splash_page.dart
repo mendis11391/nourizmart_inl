@@ -51,7 +51,7 @@ class SplashPageState extends State<SplashPage> {
   }
 
   startCountdownTimer() async {
-    if (await delayNavigation(3500)) {
+    if (await delayNavigation(4000)) {
       // appLog('Finish Count down');
       isAllowNextPage = true;
       moveToNextPage();
@@ -128,7 +128,7 @@ Widget splashAnimation() => Center(
           borderRadius: BorderRadius.circular(getSize(200)),
         ),
         child: AppImage(
-          assetName: AppResource.icGifSplash,
+          assetName: AppResource.gifSplash,
           width: getSize(200),
           height: getSize(200),
         ),

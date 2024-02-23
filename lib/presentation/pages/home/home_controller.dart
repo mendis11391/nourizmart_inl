@@ -5,8 +5,8 @@ class HomeController extends GetxController {
       isOfferLoading = true.obs,
       isOrderLoading = true.obs,
       circleInx = 0.obs,
-      notificationCount = '9'.obs,
-      cartCount = '17'.obs,
+      notificationCount = 0.obs,
+      cartCount = 0.obs,
       pageNo = 0,
       showLoadingStyle = ApiCallLoadingTypeEnum.none.obs;
   late final PageController pgController;
@@ -62,6 +62,13 @@ class HomeController extends GetxController {
 
       isOrderLoading.value = false;
     }
+
+    notificationCount.value = 9;
+    cartCount.value = 17;
+    if (await delayNavigation(2000)) {
+      notificationCount.value = 2;
+      cartCount.value = 0;
+    }
   }
 
   Timer getTimer() => Timer.periodic(
@@ -81,27 +88,32 @@ class HomeController extends GetxController {
       );
 
   cardAction() {
-    showToast('Card Action');
+    navigatePage(AppConstants.viewCartPage);
   }
 
   notificationAction() {
     showToast('Notification Action');
   }
 
-  addressAction() {
-    showToast('Address Action');
+  addressAction() async {
+    await saveStorageValue(UserKeys.whereFromAddressStr, 'home');
+    navigatePage(AppConstants.addressListPage);
   }
 
   profileAction() {
     showToast('Profile Action');
   }
 
-  discountAction() {
-    showToast('Discount Action');
+  discountAction() async {
+    await saveStorageValue(
+        UserKeys.whichDeliveryInt, DeliveryType.discount.value);
+    navigatePage(AppConstants.productListPage);
   }
 
-  instantAction() {
-    showToast('Instant Action');
+  instantAction() async {
+    await saveStorageValue(
+        UserKeys.whichDeliveryInt, DeliveryType.instant.value);
+    navigatePage(AppConstants.productListPage);
   }
 
   seeMoreAction() {

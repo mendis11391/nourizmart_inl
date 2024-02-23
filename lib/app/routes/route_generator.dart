@@ -29,6 +29,51 @@ class RouteGenerator {
       page: () => const HomePage(),
       binding: HomeBinding(),
     ),
+    GetPage(
+      name: AppRoutes.profileRoute,
+      page: () => const ProfilePage(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.notificationsListRoute,
+      page: () => const NotificationsListPage(),
+      binding: NotificationsListBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.productListRoute,
+      page: () => const ProductListPage(),
+      binding: ProductListBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.viewCartRoute,
+      page: () => const ViewCartPage(),
+      binding: ViewCartBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.orderListRoute,
+      page: () => const OrderListPage(),
+      binding: OrderListBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.orderDetailsRoute,
+      page: () => const OrderDetailsPage(),
+      binding: OrderDetailsBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.addressListRoute,
+      page: () => const AddressListPage(),
+      binding: AddressListBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.addAddressRoute,
+      page: () => const AddAddressPage(),
+      binding: AddAddressBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.paymentRoute,
+      page: () => const PaymentPage(),
+      binding: PaymentBinding(),
+    ),
   ];
 
   //* Unknown Pages Route *//

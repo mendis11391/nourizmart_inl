@@ -10,3 +10,13 @@ enum ApiCallLoadingTypeEnum {
   loadMore,
   search
 }
+
+//* Delivery Type
+enum DeliveryType { instant, discount }
+
+//* Instant = 1, Discount = 2
+extension DeliveryTypeId on DeliveryType {
+  int get value {
+    return [1, 2][index];
+  }
+}

@@ -52,7 +52,7 @@ class AppLoader extends StatelessWidget {
               // assetName: !isFieldEmpty(imageStr)
               //     ? validString(imageStr)
               //     : AppResource.icGifLoader,
-              assetName: AppResource.icGifLoader,
+              assetName: AppResource.gifLoader,
               height: getSize(50),
               width: getSize(50),
               boxFit: BoxFit.contain,

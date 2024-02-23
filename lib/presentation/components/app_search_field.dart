@@ -40,6 +40,7 @@ class AppSearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.zero,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(getSize(removeCardShape! ? 0 : 10)),

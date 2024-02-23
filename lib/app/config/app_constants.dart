@@ -28,4 +28,13 @@ class AppConstants {
   static const int otpPage = 103;
   static const int registerPage = 104;
   static const int homePage = 105;
+  static const int profilePage = 106;
+  static const int notificationsListPage = 107;
+  static const int productListPage = 108;
+  static const int viewCartPage = 109;
+  static const int orderListPage = 110;
+  static const int orderDetailsPage = 111;
+  static const int addressListPage = 112;
+  static const int addAddressPage = 113;
+  static const int paymentPage = 114;
 }

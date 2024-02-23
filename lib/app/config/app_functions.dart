@@ -167,6 +167,33 @@ appLog(dynamic msg,
   }
 }
 
+String makeCurrencyFormat(dynamic input,
+    {bool isRupee = false, bool isShowZeroDigit = false}) {
+  try {
+    if (isRupee) {
+      double number = double.tryParse(input.toString()) ?? 0.0;
+      NumberFormat numberFormat = NumberFormat.currency(
+        locale: 'HI',
+        symbol: '₹',
+      );
+
+      String result = numberFormat.format(number);
+      if (!isShowZeroDigit) {
+        result = result.replaceAll('.00', '');
+      }
+      return result;
+    } else {
+      return input.toString().padLeft(2, '0');
+    }
+  } on Error catch (e) {
+    handleException(e, 'Make Two Digits');
+    return input.toString().padLeft(2, '0');
+  } catch (error) {
+    handleException(error, 'Make Two Digits');
+    return input.toString().padLeft(2, '0');
+  }
+}
+
 callOkDialog({
   String mTitle = 'Alert!',
   String mDescriptions = 'Are you sure, you want to exit?',
@@ -221,6 +248,24 @@ callYesOrNoDialog({
 
 exitApplication() {
   SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+}
+
+bool isListsAreEqual<T>(
+    List<T> oldList, List<T> newList, String Function(T) getKey) {
+  oldList.sort((a, b) => getKey(a).compareTo(getKey(b)));
+  newList.sort((a, b) => getKey(a).compareTo(getKey(b)));
+
+  if (oldList.length != newList.length) {
+    return false;
+  }
+
+  for (int i = 0; i < oldList.length; i++) {
+    if (getKey(oldList[i]) != getKey(newList[i])) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 void setUserValueForCrashlytics() {

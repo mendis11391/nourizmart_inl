@@ -23,6 +23,7 @@ class AppDivider extends StatelessWidget {
     return isVertical
         ? SizedBox(
             width: getSize(verticalWidth),
+            height: getSize(dividerHeight),
             child: buildDivider(dividerHeight, dividerThickness),
           )
         : SizedBox(
@@ -33,7 +34,7 @@ class AppDivider extends StatelessWidget {
 
   Widget buildDivider(double height, double width) => Center(
         child: SizedBox(
-          height: height,
+          height: getSize(height),
           width: width,
           child: ColoredBox(color: color),
         ),

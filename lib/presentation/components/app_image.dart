@@ -6,7 +6,6 @@ class AppImage extends StatelessWidget {
   final BoxFit? boxFit;
   final double? height, width;
   final dynamic pictureUrl;
-  final String? errorUrl;
   final bool isNetworkUrl;
 
   const AppImage({
@@ -17,7 +16,6 @@ class AppImage extends StatelessWidget {
     this.color,
     this.boxFit = BoxFit.fill,
     this.pictureUrl,
-    this.errorUrl,
     this.isNetworkUrl = false,
   });
 
@@ -25,41 +23,49 @@ class AppImage extends StatelessWidget {
   Widget build(BuildContext context) => buildImageView();
 
   Widget buildImageView() {
-    String errorImg = validString(errorUrl);
     String mimeType = assetName!.split('.').last;
     if (isNetworkUrl) {
       if (!isFieldEmpty(pictureUrl)) {
         String imageUrl = validString(pictureUrl).toLowerCase();
-
         if (imageUrl.startsWith('http') || imageUrl.startsWith('https')) {
-          return FadeInImage.assetNetwork(
-            height: height,
-            width: width,
-            placeholder: AppResource.icGifPlaceHolder,
-            image: pictureUrl,
-            fit: BoxFit.cover,
-            imageErrorBuilder: (context, error, stackTrace) {
-              return Image.asset(
-                AppResource.bgNoImage,
-                fit: BoxFit.contain,
-                height: height,
-                width: width,
-              );
-            },
-          );
+          try {
+            return FadeInImage.assetNetwork(
+              height: height,
+              width: width,
+              placeholder: AppResource.gifPlaceHolder,
+              image: pictureUrl,
+              fit: BoxFit.cover,
+              imageErrorBuilder: (context, error, stackTrace) {
+                return Image.asset(
+                  AppResource.bgNoImage,
+                  fit: BoxFit.contain,
+                  height: height,
+                  width: width,
+                );
+              },
+            );
+          } catch (e) {
+            appLog(e.toString(), logType: LogType.error);
+            return Image.asset(
+              AppResource.bgNoImage,
+              fit: BoxFit.contain,
+              height: height,
+              width: width,
+            );
+          }
         } else {
-          return AppImage(
-            assetName: errorImg,
+          return Image.asset(
+            AppResource.bgNoImage,
+            fit: BoxFit.contain,
             height: height,
-            isNetworkUrl: false,
             width: width,
           );
         }
       } else {
-        return AppImage(
-          assetName: errorImg,
+        return Image.asset(
+          AppResource.bgNoImage,
+          fit: BoxFit.contain,
           height: height,
-          isNetworkUrl: false,
           width: width,
         );
       }
@@ -69,7 +75,7 @@ class AppImage extends StatelessWidget {
           return MySVG(
             height: height,
             width: width,
-            fit: BoxFit.fitWidth,
+            fit: boxFit,
             color: color,
             image: assetName!,
           );

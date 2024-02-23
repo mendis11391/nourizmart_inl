@@ -18,133 +18,17 @@ class HomePage extends GetView<HomeController> {
         ),
       );
 
-  AppBar buildAppBar() => AppBar(
-        backgroundColor: getPrimaryColor(),
-        iconTheme: const IconThemeData(color: Colors.white),
-        toolbarHeight: kToolbarHeight + 5,
-        elevation: 2,
-        centerTitle: false,
-        title: InkWell(
-          onTap: () => controller.addressAction(),
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AppText(
-                text: 'User Name',
-                size: 14,
-                weight: FontWeight.bold,
-                color: Colors.white,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: AppText(
-                      text:
-                          'Sector 6, HSR Layout, Bengaluru, 560102 560102 560102',
-                      size: 12,
-                      color: Colors.white,
-                      maxLine: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Icon(Icons.keyboard_arrow_down_rounded)
-                ],
-              ),
-            ],
-          ),
-        ),
-        titleSpacing: getHorizontalSize(5),
-        leading: InkWell(
-          onTap: () => controller.profileAction(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(getSize(35))),
-                child: AppImage(
-                  assetName: AppResource.icAvatar,
-                  width: getSize(35),
-                  height: getSize(35),
-                ),
-              ),
-            ],
-          ),
-        ),
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        actions: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              IconButton(
-                onPressed: () => controller.cardAction(),
-                icon: AppImage(
-                  assetName: AppResource.icCart,
-                  width: getSize(22),
-                  height: getSize(22),
-                ),
-              ),
-              Positioned(
-                  right: 5,
-                  top: 8,
-                  child: Container(
-                    padding: getPadding(all: 1),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    constraints: const BoxConstraints(
-                      minWidth: 15,
-                      minHeight: 15,
-                    ),
-                    child: AppText(
-                      text: controller.cartCount.value,
-                      size: 8,
-                      textAlign: TextAlign.center,
-                      color: Colors.white,
-                    ),
-                  ))
-            ],
-          ),
-          const SpaceWidth(mWidth: 5),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              IconButton(
-                onPressed: () => controller.notificationAction(),
-                icon: AppImage(
-                  assetName: AppResource.icNotification,
-                  width: getSize(22),
-                  height: getSize(22),
-                ),
-              ),
-              Positioned(
-                right: 10,
-                top: 8,
-                child: Container(
-                  padding: getPadding(all: 1),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  constraints: const BoxConstraints(
-                    minWidth: 15,
-                    minHeight: 15,
-                  ),
-                  child: AppText(
-                    text: controller.notificationCount.value,
-                    size: 8,
-                    textAlign: TextAlign.center,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+  AddressToolBar buildAppBar() => AddressToolBar(
+        onTapToolAddress: () => controller.addressAction(),
+        onTapToolUser: () => controller.profileAction(),
+        onTapToolCart: () => controller.cardAction(),
+        onTapToolNotification: () => controller.notificationAction(),
+        userName: 'User Name',
+        address: 'Sector 6, HSR Layout, Bengaluru, 560102 560102 560102',
+        notificationCount: controller.notificationCount,
+        cartCount: controller.cartCount,
+        hideCart: false,
+        hideNotification: false,
       );
 
   Widget buildBody() => SafeArea(
@@ -156,8 +40,12 @@ class HomePage extends GetView<HomeController> {
               buildIndicator(),
               buildDiscountCard(),
               buildInstantCard(),
-              buildOrderLabel(),
-              buildOrderListData(),
+              if (controller.orderList.isNotEmpty) ...[
+                buildOrderLabel(),
+                buildOrderListBuilder(),
+              ] else ...[
+                orderNoData(),
+              ]
             ],
           ),
         ),
@@ -169,7 +57,58 @@ class HomePage extends GetView<HomeController> {
   Widget offerNoData() => Visibility(
         visible: (controller.isOfferLoading.isTrue),
         replacement: const SizedBox.shrink(),
-        child: const AppCircularProgress(),
+        child: buildOfferLoader(),
+      );
+
+  Widget buildOfferLoader() => Padding(
+        padding: getPadding(top: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const Spacer(),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Card(
+                  elevation: 1,
+                  color: AppColors.appThemeColor.shade50,
+                  clipBehavior: Clip.antiAlias,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(getSize(10)),
+                      side: BorderSide(color: getPrimaryColor())),
+                  child: SizedBox(
+                    height: getSize(160),
+                    width: getSize(290),
+                  ),
+                ),
+                Positioned(
+                  child: Column(
+                    children: [
+                      CircularProgressIndicator(
+                        color: getPrimaryColor(),
+                        strokeWidth: getSize(2),
+                      ),
+                      const SpaceHeight(mHeight: 10),
+                      const AppText(text: 'Please wait...', size: 16)
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Card(
+              elevation: 1,
+              color: AppColors.appThemeColor.shade50,
+              clipBehavior: Clip.antiAlias,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(getSize(10)),
+                  side: BorderSide(color: getPrimaryColor())),
+              child: SizedBox(
+                height: getSize(160),
+                width: getSize(30),
+              ),
+            ),
+          ],
+        ),
       );
 
   Widget buildOfferListBuilder() => Padding(
@@ -277,7 +216,7 @@ class HomePage extends GetView<HomeController> {
                     const AppText(
                       text:
                           'Lorem ipsum dolor sit amet, consecteturadipiscing elit do eiusmod tempor.',
-                      size: 14,
+                      size: 13,
                     ),
                   ],
                 ),
@@ -335,7 +274,7 @@ class HomePage extends GetView<HomeController> {
                     const AppText(
                       text:
                           'Lorem ipsum dolor sit amet, consecteturadipiscing elit do eiusmod tempor.',
-                      size: 14,
+                      size: 13,
                     ),
                   ],
                 ),
@@ -370,8 +309,8 @@ class HomePage extends GetView<HomeController> {
         ),
       );
 
-  Widget buildOrderListData() =>
-      controller.orderList.isEmpty ? orderNoData() : buildOrderListBuilder();
+  // Widget buildOrderListData() =>
+  //     controller.orderList.isEmpty ? orderNoData() : buildOrderListBuilder();
 
   Widget orderNoData() => Visibility(
         visible: (controller.isOrderLoading.isTrue),

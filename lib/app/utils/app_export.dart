@@ -48,6 +48,9 @@ export 'package:nourish_mart/presentation/components/app_circular_progress.dart'
 export 'package:nourish_mart/presentation/components/dialog/app_dialog.dart';
 export 'package:nourish_mart/presentation/components/app_space_height.dart';
 export 'package:nourish_mart/presentation/components/app_space_width.dart';
+export 'package:nourish_mart/presentation/components/address_bar.dart';
+export 'package:nourish_mart/presentation/components/app_checkbox_tile.dart';
+export 'package:nourish_mart/presentation/components/app_switch.dart';
 
 
 // export 'package:seven_eleven/app/config/api_path.dart';
