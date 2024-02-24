@@ -349,9 +349,9 @@ class HomePage extends GetView<HomeController> {
               clipBehavior: Clip.antiAlias,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(getSize(10)),
-                  side: BorderSide(color: Colors.grey.shade600)),
+                  side: BorderSide(color: Colors.grey.shade400)),
               child: Padding(
-                padding: getPadding(all: 8),
+                padding: getPadding(all: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -365,7 +365,7 @@ class HomePage extends GetView<HomeController> {
                           children: [
                             AppText(
                               text: 'Date',
-                              size: 14,
+                              size: 13,
                               color: Colors.grey.shade700,
                             ),
                             const SpaceHeight(mHeight: 3),
@@ -375,7 +375,7 @@ class HomePage extends GetView<HomeController> {
                                   : index == 1
                                       ? '08/01/2024'
                                       : '06/12/2023',
-                              size: 14,
+                              size: 13,
                               weight: FontWeight.bold,
                             ),
                           ],
@@ -386,7 +386,7 @@ class HomePage extends GetView<HomeController> {
                           children: [
                             AppText(
                               text: 'Amount',
-                              size: 14,
+                              size: 13,
                               color: Colors.grey.shade700,
                             ),
                             const SpaceHeight(mHeight: 3),
@@ -396,14 +396,14 @@ class HomePage extends GetView<HomeController> {
                                   : index == 1
                                       ? '₹680'
                                       : '₹842',
-                              size: 14,
+                              size: 13,
                               weight: FontWeight.bold,
                             ),
                           ],
                         ),
                       ],
                     ),
-                    const SpaceHeight(mHeight: 16),
+                    const SpaceHeight(mHeight: 12),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -413,7 +413,7 @@ class HomePage extends GetView<HomeController> {
                           children: [
                             AppText(
                               text: 'Order Number',
-                              size: 14,
+                              size: 13,
                               color: Colors.grey.shade700,
                             ),
                             const SpaceHeight(mHeight: 3),
@@ -423,7 +423,7 @@ class HomePage extends GetView<HomeController> {
                                   : index == 1
                                       ? 'GDF385MJY7'
                                       : 'QCF245UI95',
-                              size: 14,
+                              size: 13,
                               weight: FontWeight.bold,
                             ),
                           ],
@@ -434,7 +434,7 @@ class HomePage extends GetView<HomeController> {
                           children: [
                             AppText(
                               text: 'Status',
-                              size: 14,
+                              size: 13,
                               color: Colors.grey.shade700,
                             ),
                             const SpaceHeight(mHeight: 3),
@@ -444,7 +444,7 @@ class HomePage extends GetView<HomeController> {
                                   : index == 1
                                       ? 'Pending'
                                       : 'Cancelled',
-                              size: 14,
+                              size: 13,
                               weight: FontWeight.bold,
                               color: getOrderStatusColor(index == 0
                                   ? 'Delivered'

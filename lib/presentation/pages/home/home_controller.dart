@@ -117,11 +117,12 @@ class HomeController extends GetxController {
   }
 
   seeMoreAction() {
-    showToast('SeeMore Action');
+    navigatePage(AppConstants.orderListPage);
   }
 
   orderAction(int index) {
     showToast('Order Action ${index + 1}');
+    // navigatePage(AppConstants.orderDetailsPage);
   }
 
   // submitAction() async => apiDebounce(() async {
