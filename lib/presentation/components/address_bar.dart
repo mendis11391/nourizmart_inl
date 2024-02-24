@@ -88,9 +88,10 @@ class AddressToolBar extends StatelessWidget implements PreferredSizeWidget {
               )
             : IconButton(
                 onPressed: onTapToolBack,
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
+                icon: AppImage(
+                  assetName: AppResource.icBack,
+                  width: getSize(18),
+                  height: getSize(14),
                 ),
               ),
         systemOverlayStyle: SystemUiOverlayStyle.light,

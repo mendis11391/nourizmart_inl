@@ -1,3 +1,5 @@
+
+
 import '../../../../app/utils/app_export.dart';
 
 class SplashPage extends StatefulWidget {
@@ -24,6 +26,7 @@ class SplashPageState extends State<SplashPage> {
     // appLog('initState');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // appLog('All ui are rendered');
+      getBuildVersion();
       startCountdownTimer();
     });
   }
@@ -48,6 +51,33 @@ class SplashPageState extends State<SplashPage> {
         ),
       ),
     );
+  }
+
+  getBuildVersion() async {
+    try {
+      var serverName = Env.baseurl == Env.stagingServer
+          ? 'Dev'
+          
+              : '';
+      String yamlString = await rootBundle.loadString('pubspec.yaml');
+      var lines = yamlString.split('\n');
+      String versionLine =
+          lines.firstWhere((line) => line.trim().startsWith('version:'));
+      String version = versionLine.trim().split('version:').last.trim();
+      String versionName = version.split('+').first;
+      String buildNumber = version.split('+').last;
+      // appLog('versionName : $versionName, buildNumber : $buildNumber');
+      AppConstants.appVersionName = '$versionName $serverName';
+      AppConstants.appBuildNumber = validInt(buildNumber);
+      // if (Env.baseurl == Env.productionServer) {
+      //   invokeApiCall();
+      // } else {
+      //   isSuccessApiVersion = true;
+      //   nextPage();
+      // }
+    } catch (e) {
+      appLog('Unable to get App version : $e', logType: LogType.error);
+    }
   }
 
   startCountdownTimer() async {

@@ -101,7 +101,7 @@ class HomeController extends GetxController {
   }
 
   profileAction() {
-    showToast('Profile Action');
+    navigatePage(AppConstants.profilePage);
   }
 
   discountAction() async {

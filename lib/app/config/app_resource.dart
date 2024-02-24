@@ -13,10 +13,9 @@ class AppResource {
 
   //* Asset Image path *//
   static const String bgNoImage = 'assets/images/ic_no_image.png';
-  // static const String bgLogin = 'assets/images/bg_login.svg';
 
   //* Asset Icon path *//
-  // static const String icNoData = 'assets/icons/ic_empty.svg';
+  static const String icBack = 'assets/icons/ic_back_arrow.svg';
   static const String icAvatar = 'assets/icons/ic_avatar.jpeg';
   static const String icLoginUser = 'assets/icons/ic_login_user.png';
   static const String icArea = 'assets/icons/ic_area.svg';
@@ -34,4 +33,7 @@ class AppResource {
   static const String icFilterProduct = 'assets/icons/ic_filter_product.svg';
   static const String icDelete = 'assets/icons/ic_delete.svg';
   static const String icEdit = 'assets/icons/ic_edit.svg';
+  static const String icAddressBook = 'assets/icons/ic_address_book.svg';
+  static const String icOrderHistory = 'assets/icons/ic_order_history.svg';
+  static const String icLogout = 'assets/icons/ic_logout.svg';
 }

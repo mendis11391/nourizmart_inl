@@ -291,11 +291,9 @@ class ProductListController extends GetxController {
     navigatePage(AppConstants.addressListPage);
   }
 
-  viewCartAction() {
+  addCartAction() {
     navigatePage(AppConstants.viewCartPage);
   }
-
-  
 
   // submitAction() async => apiDebounce(() async {
   //       hideKeyBoardFocus();

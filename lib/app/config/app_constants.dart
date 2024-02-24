@@ -21,6 +21,8 @@ class AppConstants {
   static const int appZeroDuration = 0;
   static const int appResetLoadingDuration = appDelayDuration;
   static const int doubleClickPreventDelayDuration = appTransitionDuration;
+  static String appVersionName = '';
+  static int appBuildNumber = 0;
   static int loginStatus = 0;
 
   static const int splashPage = 101;

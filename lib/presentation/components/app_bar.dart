@@ -22,7 +22,7 @@ class AppToolBar extends StatelessWidget implements PreferredSizeWidget {
     // this.elevation,
     this.bgColor = AppColors.appThemeColor,
     this.textIconColor = Colors.white,
-    this.svgIcon,
+    this.svgIcon = AppResource.icBack,
     this.height = kToolbarHeight,
     this.hideBack = false,
     this.isNeedShadow = true,
@@ -64,7 +64,11 @@ class AppToolBar extends StatelessWidget implements PreferredSizeWidget {
                 : IconButton(
                     onPressed: onToolBackPressed,
                     icon: !isFieldEmpty(svgIcon)
-                        ? AppImage(assetName: svgIcon)
+                        ? AppImage(
+                            assetName: svgIcon,
+                            width: getSize(18),
+                            height: getSize(14),
+                          )
                         : Icon(
                             Icons.arrow_back,
                             color: textIconColor,

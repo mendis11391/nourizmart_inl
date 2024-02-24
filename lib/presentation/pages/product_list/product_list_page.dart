@@ -414,8 +414,8 @@ class ProductListPage extends GetView<ProductListController> {
               AppButton(
                 buttonIcon: AppResource.icCart,
                 isShowLeftBtnIcon: true,
-                buttonText: 'View Cart',
-                onTap: () => controller.viewCartAction(),
+                buttonText: 'Add Cart',
+                onTap: () => controller.addCartAction(),
                 //isEnable: controller.isBtnEnable.isTrue,
                 textSize: getFontSize(13),
                 weight: FontWeight.normal,
