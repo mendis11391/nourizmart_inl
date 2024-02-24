@@ -39,13 +39,14 @@ class ProfileController extends GetxController {
     showToast('Edit Action');
   }
 
-  yourInfoAction(int id) {
+  yourInfoAction(int id) async {
     switch (id) {
       case 1: // Order History
-        showToast('Order History Action');
+        navigatePage(AppConstants.orderListPage);
         break;
       case 2: // Address Book
-        showToast('Address Book Action');
+        await saveStorageValue(UserKeys.whereFromAddressStr, 'profile');
+        navigatePage(AppConstants.addressListPage);
         break;
     }
   }

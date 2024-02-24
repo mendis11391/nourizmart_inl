@@ -287,7 +287,7 @@ class ProductListController extends GetxController {
   }
 
   addressAction() async {
-    await saveStorageValue(UserKeys.whereFromAddressStr, 'home');
+    await saveStorageValue(UserKeys.whereFromAddressStr, 'product');
     navigatePage(AppConstants.addressListPage);
   }
 

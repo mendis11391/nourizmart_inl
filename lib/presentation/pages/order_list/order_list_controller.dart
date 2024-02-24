@@ -1,7 +1,7 @@
 import '../../../../../app/utils/app_export.dart';
 
 class OrderListController extends GetxController {
-  var title = 'Order List'.obs,
+  var title = 'Order History'.obs,
       isLoading = true.obs,
       limits = 10,
       page = 1,

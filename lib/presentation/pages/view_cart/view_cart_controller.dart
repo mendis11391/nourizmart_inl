@@ -62,19 +62,7 @@ class ViewCartController extends GetxController {
       isInstantDelivery = (await getStorageValue(UserKeys.whichDeliveryInt) ==
           DeliveryType.instant.value);
 
-      for (int i = 0; i < 10; i++) {
-        responseList.add(validString(i));
-        singleItemQty.add('$i');
-      }
-
-      if (!isInstantDelivery) {
-        totalAmt.value = 0.0;
-        allProductAmt.value = 0.0;
-        deliveryAmt.value = 0.0;
-        tax.value = 0.0;
-      }
-
-      // invokeApiCall();
+      invokeApiCall();
     }
   }
 
@@ -122,7 +110,17 @@ class ViewCartController extends GetxController {
       // } else {
       //   showToast('Failed: OnBoard Store List', msgType: ToastEnumType.error);
       // }
+      for (int i = 0; i < 10; i++) {
+        responseList.add(validString(i));
+        singleItemQty.add('$i');
+      }
 
+      if (!isInstantDelivery) {
+        totalAmt.value = 0.0;
+        allProductAmt.value = 0.0;
+        deliveryAmt.value = 0.0;
+        tax.value = 0.0;
+      }
       await resetLoading(AppConstants.appResetLoadingDuration);
     } catch (e) {
       handleApiException(e, 'Product List');

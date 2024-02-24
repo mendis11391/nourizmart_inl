@@ -3,7 +3,7 @@ import '../../../../../app/utils/app_export.dart';
 class HomeController extends GetxController {
   var title = 'Home'.obs,
       isOfferLoading = true.obs,
-      isOrderLoading = true.obs,
+      isOrderLoading = false.obs,
       circleInx = 0.obs,
       notificationCount = 0.obs,
       cartCount = 0.obs,
@@ -44,6 +44,48 @@ class HomeController extends GetxController {
   getSharedValue() async {
     if (await delayNavigation(AppConstants.appShortDelayDuration)) {
       // Api Call
+
+      invokeOfferApiCall();
+      invokeOrderApiCall();
+    }
+
+    notificationCount.value = 9;
+    cartCount.value = 17;
+    // if (await delayNavigation(2000)) {
+    //   notificationCount.value = 2;
+    //   cartCount.value = 0;
+    // }
+  }
+
+  invokeOfferApiCall() async {
+    isOfferLoading.value = true;
+    if (await checkInternetConnection()) {
+      apiCallOfferList();
+    } else {
+      isOfferLoading.value = false;
+    }
+  }
+
+  apiCallOfferList() async {
+    // dynamic payload = requestByData(searchText);
+
+    try {
+      // var response = await useCase.executeStoreList(payload);
+
+      // if (response.data != null && response.data!.rows != null) {
+      //   totalStore.value = validInt(response.data!.count);
+
+      //   if (isPagination && response.data!.rows!.isEmpty) {
+      //     isLoadMoreApi(false);
+      //     offset -= limits;
+      //     showToast('lbl_no_more_data'.tr);
+      //     isNoMoreItem(true);
+      //   }
+      //   responseList.addAll(response.data!.rows!);
+
+      // } else {
+      //   showToast('Failed: OnBoard Store List', msgType: ToastEnumType.error);
+      // }
       offerList.add(
           'https://img.freepik.com/free-photo/fresh-vegetables-tomato-cauliflower-carrot-broccoli-onion-bell-pepper-generated-by-artificial-intelligence_25030-60620.jpg?t=st=1708269235~exp=1708272835~hmac=d33188b0740b1c197273be28816b24bc22515d8b47d88b8f45a7d0bdaa25e894&w=2000');
       offerList.add(
@@ -54,21 +96,16 @@ class HomeController extends GetxController {
       if (offerList.isNotEmpty) {
         carouselTimer = getTimer();
       }
+
       isOfferLoading.value = false;
-
-      for (int i = 0; i < 3; i++) {
-        orderList.add(validString(i));
-      }
-
-      isOrderLoading.value = false;
+    } catch (e) {
+      handleOfferApiException(e, 'Offer List');
     }
+  }
 
-    notificationCount.value = 9;
-    cartCount.value = 17;
-    if (await delayNavigation(2000)) {
-      notificationCount.value = 2;
-      cartCount.value = 0;
-    }
+  handleOfferApiException(dynamic error, String tag) async {
+    showToast(validString(error), toastType: ToastType.error);
+    isOfferLoading.value = false;
   }
 
   Timer getTimer() => Timer.periodic(
@@ -86,6 +123,50 @@ class HomeController extends GetxController {
           pageNo++;
         }),
       );
+
+  invokeOrderApiCall() async {
+    isOrderLoading.value = true;
+    if (await checkInternetConnection()) {
+      apiCallOrderList();
+    } else {
+      isOrderLoading.value = false;
+    }
+  }
+
+  apiCallOrderList() async {
+    // dynamic payload = requestByData(searchText);
+
+    try {
+      // var response = await useCase.executeStoreList(payload);
+
+      // if (response.data != null && response.data!.rows != null) {
+      //   totalStore.value = validInt(response.data!.count);
+
+      //   if (isPagination && response.data!.rows!.isEmpty) {
+      //     isLoadMoreApi(false);
+      //     offset -= limits;
+      //     showToast('lbl_no_more_data'.tr);
+      //     isNoMoreItem(true);
+      //   }
+      //   responseList.addAll(response.data!.rows!);
+
+      // } else {
+      //   showToast('Failed: OnBoard Store List', msgType: ToastEnumType.error);
+      // }
+      for (int i = 0; i < 3; i++) {
+        orderList.add(validString(i));
+      }
+
+      isOrderLoading.value = false;
+    } catch (e) {
+      handleOrderApiException(e, 'Order List');
+    }
+  }
+
+  handleOrderApiException(dynamic error, String tag) async {
+    showToast(validString(error), toastType: ToastType.error);
+    isOrderLoading.value = false;
+  }
 
   cardAction() {
     navigatePage(AppConstants.viewCartPage);
@@ -121,8 +202,7 @@ class HomeController extends GetxController {
   }
 
   orderAction(int index) {
-    showToast('Order Action ${index + 1}');
-    // navigatePage(AppConstants.orderDetailsPage);
+    navigatePage(AppConstants.orderDetailsPage);
   }
 
   // submitAction() async => apiDebounce(() async {
