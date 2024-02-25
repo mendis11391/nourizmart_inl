@@ -173,7 +173,7 @@ class HomeController extends GetxController {
   }
 
   notificationAction() {
-    showToast('Notification Action');
+    navigatePage(AppConstants.notificationsListPage);
   }
 
   addressAction() async {

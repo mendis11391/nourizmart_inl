@@ -36,4 +36,8 @@ class AppResource {
   static const String icAddressBook = 'assets/icons/ic_address_book.svg';
   static const String icOrderHistory = 'assets/icons/ic_order_history.svg';
   static const String icLogout = 'assets/icons/ic_logout.svg';
+  static const String icOrderPlaced = 'assets/icons/ic_order_placed.png';
+  static const String icResidential = 'assets/icons/ic_residential.png';
+  static const String icVisa = 'assets/icons/ic_visa_done.png';
+  static const String icShopping = 'assets/icons/ic_shopping.png';
 }

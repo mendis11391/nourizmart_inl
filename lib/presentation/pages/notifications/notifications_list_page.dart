@@ -24,46 +24,129 @@ class NotificationsListPage extends GetView<NotificationsListController> {
         onToolBackPressed: () => controller.backValidationAction(),
       );
 
-  Widget buildBody() =>  SafeArea(
+  Widget buildBody() => SafeArea(
         child: Column(
           children: [
-            // buildNote(),
-            // buildListData(),
-
-            AppText(text: controller.title.value, size: 25),
+            buildListSection(),
           ],
         ),
       );
 
-  //  Widget buildListData() =>
-  // controller.responseList.isEmpty ? loadingNoData() : buildListBuilder();
+  Widget buildListSection() =>
+      controller.responseList.isEmpty ? loadingNoData() : buildListBuilder();
 
-  // Widget loadingNoData() => Visibility(
-  //   visible: (controller.showLoadingStyle.value ==
-  //           ApiCallLoadingTypeEnum.circularProgress ||
-  //       controller.showLoadingStyle.value == ApiCallLoadingTypeEnum.search),
-  //   replacement: controller.isLoading.isFalse
-  //       ? const AppNoDataFound()
-  //       : const SizedBox.shrink(),
-  //   child: AppCircularProgress(loadingText: 'lbl_please_wait'.tr),
-  // );
+  Widget loadingNoData() => Visibility(
+        visible: (controller.showLoadingStyle.value ==
+                ApiCallLoadingTypeEnum.circularProgress ||
+            controller.showLoadingStyle.value == ApiCallLoadingTypeEnum.search),
+        replacement: controller.isLoading.isFalse
+            ? const AppNoDataFound()
+            : const SizedBox.shrink(),
+        child: const AppCircularProgress(),
+      );
 
-  // Widget buildBottomNavigation() => ColoredBox(
-  //       color: AppColors.commonThemeShade50,
-  //       child: Padding(
-  //         padding: getPadding(
-  //           top: 10,
-  //           bottom: 10,
-  //           left: 15,
-  //           right: 15,
-  //         ),
-  //         child: AppButton(
-  //           textSize: getFontSize(14),
-  //           buttonText: 'Continue',
-  //           borderRadius: getSize(5),
-  //           weight: FontWeight.bold,
-  //           onTap: () => controller.submitAction(),
-  //         ),
-  //       ),
-  //     );
+  Widget buildListBuilder() => Expanded(
+        child: ListView.separated(
+          controller: controller.scrollController,
+          padding: getPadding(left: 12, right: 12, top: 15, bottom: 20),
+          physics: const BouncingScrollPhysics(),
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          shrinkWrap: true,
+          itemCount: controller.responseList.length,
+          itemBuilder: (context, idx) {
+            if (idx == (controller.responseList.length - 1) &&
+                controller.isLoadMoreApi.isTrue) {
+              return const AppLoadMore();
+            } else {
+              final String item = controller.responseList[idx];
+              return buildListElements(item, idx);
+            }
+          },
+          separatorBuilder: (BuildContext context, int index) => AppDivider(
+            // color: Colors.transparent,
+            height: getSize(5),
+            // thickness: getSize(1),
+          ),
+        ),
+      );
+
+  Widget buildListElements(String item, int idx) => ListTile(
+        contentPadding: EdgeInsets.zero,
+        visualDensity: const VisualDensity(horizontal: -4, vertical: -2),
+        leading: Container(
+          height: getSize(40),
+          width: getSize(40),
+          padding: getPadding(all: 5),
+          decoration: BoxDecoration(
+            color: getBgColor(idx),
+            borderRadius: BorderRadius.circular(getSize(5)),
+          ),
+          child: AppImage(
+            assetName: getImage(idx),
+          ),
+        ),
+        title: AppText(
+          text: getName(idx),
+          size: 14,
+        ),
+        subtitle: Padding(
+          padding: getPadding(top: 2),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.access_time,
+                size: getSize(15),
+                color: Colors.grey.shade700,
+              ),
+              const SpaceWidth(mWidth: 3),
+              AppText(
+                text: getTime(idx),
+                size: 13,
+                color: Colors.grey.shade700,
+              ),
+            ],
+          ),
+        ),
+      );
+
+  String getName(int idx) {
+    return idx == 0
+        ? 'Your order #[Order ID] has been confirmed.'
+        : idx == 1
+            ? 'Payment confirmation for your order #[Order ID]'
+            : idx == 2
+                ? 'Your order has been successfully placed.'
+                : 'Your new address has been added successfully.';
+  }
+
+  String getTime(int idx) {
+    return idx == 0
+        ? 'Just now'
+        : idx == 1
+            ? '1 minutes ago'
+            : idx == 2
+                ? '2 day ago'
+                : '3 weeks ago';
+  }
+
+  String getImage(int idx) {
+    return idx == 0
+        ? AppResource.icShopping
+        : idx == 1
+            ? AppResource.icVisa
+            : idx == 2
+                ? AppResource.icOrderPlaced
+                : AppResource.icResidential;
+  }
+
+  Color getBgColor(int idx) {
+    return idx == 0
+        ? const Color(0xffCAFDD1)
+        : idx == 1
+            ? const Color(0xffFFDEEC)
+            : idx == 2
+                ? const Color(0xffFFF6AD)
+                : const Color(0xffE4CCFD);
+  }
 }
