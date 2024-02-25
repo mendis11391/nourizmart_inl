@@ -1,4 +1,5 @@
 import '../../../../../app/utils/app_export.dart';
+import 'edit_profile_bs.dart';
 
 class ProfileController extends GetxController {
   var title = 'Profile'.obs,
@@ -36,7 +37,18 @@ class ProfileController extends GetxController {
   }
 
   editAction() {
-    showToast('Edit Action');
+    hideKeyBoardFocus();
+    Get.bottomSheet(
+      const EditProfileBottomSheet(),
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      isDismissible: false,
+      enableDrag: false,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
   }
 
   yourInfoAction(int id) async {
