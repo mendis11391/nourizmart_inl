@@ -210,7 +210,26 @@ class ViewCartController extends GetxController {
   }
 
   deleteAction(String item, int idx) {
-    showToast('Delete Action');
+    AppAlertDialog.showAlertDialog(
+      descriptions: const AppText(
+        text: 'Are you sure, you want to remove this item?',
+        size: 13,
+      ),
+      btn1Name: 'Delete',
+      btn2Name: 'Cancel',
+      isHideCloseIcon: true,
+      topIcon: const Icon(
+        Icons.warning_amber_rounded,
+        size: 22,
+      ),
+      onPressedBtn1: () async => {
+        AppAlertDialog.hideAlertDialog(),
+        showToast('Delete Action'),
+      },
+      onPressedBtn2: () => {
+        AppAlertDialog.hideAlertDialog(),
+      },
+    );
   }
 
   decreaseQty(String item, int idx) {
