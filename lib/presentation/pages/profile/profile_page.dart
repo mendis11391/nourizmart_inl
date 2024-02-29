@@ -153,11 +153,12 @@ class ProfilePage extends GetView<ProfileController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  personCard(Icons.person, 'First Name'),
+                  personCard(Icons.person, controller.firstName.value),
                   const SpaceHeight(mHeight: 8),
-                  personCard(Icons.person, 'Last Name'),
+                  personCard(Icons.person, controller.lastName.value),
                   const SpaceHeight(mHeight: 8),
-                  personCard(Icons.phone_iphone_outlined, 'Mobile'),
+                  personCard(
+                      Icons.phone_iphone_outlined, controller.mobile.value),
                 ],
               ),
             ),

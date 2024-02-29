@@ -231,11 +231,14 @@ class ViewCartPage extends GetView<ViewCartController> {
                                               'Select Pincode'
                                           ? Colors.grey.shade600
                                           : Colors.black,
+                                      weight: controller.storePincode.value ==
+                                              'Select Pincode'
+                                          ? FontWeight.normal
+                                          : FontWeight.bold,
                                     ),
-                                    Icon(
-                                      Icons.keyboard_arrow_down_rounded,
-                                      color: getPrimaryColor(),
-                                    ),
+                                    controller.loadingPincode.isTrue
+                                        ? dropLoader()
+                                        : dropArrow()
                                   ],
                                 ),
                               ),
@@ -715,4 +718,34 @@ class ViewCartPage extends GetView<ViewCartController> {
           ],
         ),
       );
+
+  Widget dropArrow() => Icon(
+        Icons.keyboard_arrow_down_rounded,
+        color: getPrimaryColor(),
+        // size: getSize(25),
+      );
+
+  Widget dropLoader() => SizedBox(
+        width: getSize(21),
+        height: getSize(21),
+        child: CircularProgressIndicator(
+          color: getPrimaryColor(),
+          strokeWidth: getSize(2),
+        ),
+      );
+
+  /* Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: getSize(15),
+            height: getSize(15),
+            child: CircularProgressIndicator(
+              color: getPrimaryColor(),
+              strokeWidth: getSize(2),
+            ),
+          ),
+        ],
+      ); */
 }

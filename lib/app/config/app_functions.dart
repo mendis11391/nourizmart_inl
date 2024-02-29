@@ -133,14 +133,23 @@ showToast(dynamic msg, {ToastType toastType = ToastType.normal}) {
               : Colors.blueGrey);
 }
 
-appLog(dynamic msg,
-    {LogType logType = LogType.normal,
-    int logPreviousLine = 1,
-    bool removeDot = false}) {
+void appLog(
+  dynamic msg, {
+  LogType logType = LogType.normal,
+  int logPreviousLine = 1,
+  bool removeDot = false,
+}) {
   if (!AppConstants.inProduction) {
-    var a = StackTrace.current;
-    final regexCodeLine = RegExp(r" (\(.*\))$");
-    String logMessage;
+    var stackTrace = StackTrace.current;
+    final regexCodeLine = RegExp(r' (\(.*\))$');
+
+    String logMessage = '';
+    String lineInfo = '';
+
+    if (logType == LogType.error) {
+      lineInfo = validString(
+          extractLineNumberAndPath(stackTrace, regexCodeLine, logPreviousLine));
+    }
 
     switch (logType) {
       case LogType.request:
@@ -150,20 +159,51 @@ appLog(dynamic msg,
         logMessage = '\x1B[34m$msg\x1B[0m'; // Response log
         break;
       case LogType.error:
-        String tempText =
-            '\x1B[31m$msg\x1B[0m${regexCodeLine.stringMatch(a.toString().split("\n")[logPreviousLine])}';
-        logMessage = removeDot ? tempText : '🛑 $tempText'; // Error log
+        logMessage = '\x1B[31m$msg\x1B[0m$lineInfo'; // Error log
         break;
       case LogType.json:
         logMessage = jsonEncode(msg); // JSON log
         break;
       default:
-        logMessage =
-            "$msg${regexCodeLine.stringMatch(a.toString().split("\n")[1])}";
+        lineInfo =
+            validString(extractLineNumberAndPath(stackTrace, regexCodeLine, 1));
+        logMessage = '\x1B[35m$msg\x1B[0m\t\t$lineInfo';
         break;
     }
 
     developer.log(logMessage);
+  }
+}
+
+String extractLineNumberAndPath(
+    StackTrace stackTrace, RegExp regexCodeLine, int logPreviousLine) {
+  try {
+    String rawMessage = stackTrace.toString().split('\n')[logPreviousLine];
+    if (rawMessage.contains('package:') && rawMessage.contains('.dart:')) {
+      RegExp regex = RegExp(r'#\d+\s+([\w.]+)\s+\(.*:(\d+:\d+)\)');
+      Match? match = regex.firstMatch(rawMessage);
+      if (match != null) {
+        String methodName = match.group(1)!;
+        String lineNumber = match.group(2)!;
+        return '$methodName:$lineNumber';
+      }
+    } else {
+      Match? match = regexCodeLine.firstMatch(rawMessage);
+      if (match != null) {
+        // String fileName =
+        //     stackTrace.toString().split('\n')[0].split('(')[1].split(')')[0];
+        // return ' (Line $capturedLine in $fileName)';
+        String capturedLine = match.group(1) ?? '';
+        return capturedLine;
+      }
+    }
+
+    return '';
+  } on Exception catch (e) {
+    if (!AppConstants.inProduction) {
+      developer.log(e.toString(), name: 'Extract Line Number EX');
+    }
+    return '';
   }
 }
 
@@ -228,11 +268,13 @@ callYesOrNoDialog({
   required VoidCallback onPressedBtn1,
 }) {
   AppAlertDialog.showAlertDialog(
-    title: AppText(
-      text: mTitle,
-      size: 15,
-      weight: FontWeight.bold,
-    ),
+    title: isFieldEmpty(mTitle)
+        ? null
+        : AppText(
+            text: mTitle,
+            size: 15,
+            weight: FontWeight.bold,
+          ),
     descriptions: AppText(
       text: mDescriptions,
       size: 13,
@@ -268,8 +310,24 @@ bool isListsAreEqual<T>(
   return true;
 }
 
-void setUserValueForCrashlytics() {
-  //FIXME : crashlytics , data get from getUserDataController()
+Future<UserDataController> getUserDataController() async {
+  UserDataController userDataController = Get.find<UserDataController>();
+  if (isFieldEmpty(userDataController.firstName.value)) {
+    await userDataController.loadUserData();
+    //userDataController = Get.find<UserDataController>();
+  }
+  return userDataController;
+}
+
+// updateLocalUserData() async {
+//   var data = Get.find<UserDataController>();
+//   await data.loadUserData();
+// }
+
+setUserValueForCrashlytics() async {
+  UserDataController userData = await getUserDataController();
+  AppConstants.userName = userData.firstName.value;
+  AppConstants.userAddress = userData.fullAddress.value;
 
   // crashlytics.setCustomKey('User_Name', 'User_Name');
   // crashlytics.setCustomKey('Mobile', 'Mobile');

@@ -28,6 +28,7 @@ class RegisterPage extends GetView<RegisterController> {
 
   Widget buildBody() => SafeArea(
         child: Form(
+          onChanged: () => controller.validator(),
           key: controller.registerFormKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: SingleChildScrollView(
@@ -137,6 +138,8 @@ class RegisterPage extends GetView<RegisterController> {
                           ),
                           const SpaceHeight(mHeight: 10),
                           AppTextField(
+                            enabled: false,
+                            showCursor: false,
                             controller: controller.mobController,
                             label: '*Mobile', isDense: true,
                             verticalPadding: getSize(10),
@@ -167,7 +170,8 @@ class RegisterPage extends GetView<RegisterController> {
                                     icon: const Icon(Icons.close),
                                     onPressed: () => controller.clearMobText(),
                                   ),
-                            onChanged: (value) => controller.onChangedMob(value),
+                            onChanged: (value) =>
+                                controller.onChangedMob(value),
                             validator: (value) =>
                                 isFieldEmpty(controller.mobController.text)
                                     ? 'Enter mobile number'
@@ -280,6 +284,7 @@ class RegisterPage extends GetView<RegisterController> {
                           const SpaceHeight(mHeight: 10),
                           AppTextField(
                             controller: controller.stateController,
+                            enabled: controller.isEnableState.isTrue,
                             label: '*State',
                             isDense: true,
                             verticalPadding: getSize(10),
@@ -304,11 +309,9 @@ class RegisterPage extends GetView<RegisterController> {
                                 ),
                               ],
                             ),
-                            suffix: Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              color: getPrimaryColor(),
-                              size: getSize(25),
-                            ),
+                            suffix: controller.loadingState.isTrue
+                                ? dropLoader()
+                                : dropArrow(),
                             // onChanged: (value) => controller.onChangedState(value),
                             showCursor: false,
                             readOnly: true,
@@ -321,6 +324,7 @@ class RegisterPage extends GetView<RegisterController> {
                           const SpaceHeight(mHeight: 10),
                           AppTextField(
                             controller: controller.districtController,
+                            enabled: controller.isEnableDistrict.isTrue,
                             label: '*District',
                             isDense: true,
                             verticalPadding: getSize(10),
@@ -345,11 +349,9 @@ class RegisterPage extends GetView<RegisterController> {
                                 ),
                               ],
                             ),
-                            suffix: Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              color: getPrimaryColor(),
-                              size: getSize(25),
-                            ),
+                            suffix: controller.loadingDistrict.isTrue
+                                ? dropLoader()
+                                : dropArrow(),
                             // onChanged: (value) => controller.onChangedDistrict(value),
                             showCursor: false,
                             readOnly: true,
@@ -362,6 +364,7 @@ class RegisterPage extends GetView<RegisterController> {
                           const SpaceHeight(mHeight: 10),
                           AppTextField(
                             controller: controller.pincodeController,
+                            enabled: controller.isEnablePincode.isTrue,
                             label: '*Pincode',
                             isDense: true,
                             verticalPadding: getSize(10),
@@ -386,11 +389,9 @@ class RegisterPage extends GetView<RegisterController> {
                                 ),
                               ],
                             ),
-                            suffix: Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              color: getPrimaryColor(),
-                              size: getSize(25),
-                            ),
+                            suffix: controller.loadingPincode.isTrue
+                                ? dropLoader()
+                                : dropArrow(),
                             // onChanged: (value) => controller.onChangedPincode(value),
                             showCursor: false,
                             readOnly: true,
@@ -403,6 +404,7 @@ class RegisterPage extends GetView<RegisterController> {
                           const SpaceHeight(mHeight: 10),
                           AppTextField(
                             controller: controller.areaController,
+                            enabled: controller.isEnableArea.isTrue,
                             label: '*Area',
                             isDense: true,
                             verticalPadding: getSize(10),
@@ -427,11 +429,9 @@ class RegisterPage extends GetView<RegisterController> {
                                 ),
                               ],
                             ),
-                            suffix: Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              color: getPrimaryColor(),
-                              size: getSize(25),
-                            ),
+                            suffix: controller.loadingArea.isTrue
+                                ? dropLoader()
+                                : dropArrow(),
                             // onChanged: (value) => controller.onChangedArea(value),
                             showCursor: false,
                             readOnly: true,
@@ -471,7 +471,8 @@ class RegisterPage extends GetView<RegisterController> {
                                     icon: const Icon(Icons.close),
                                     onPressed: () => controller.clearLand(),
                                   ),
-                            onChanged: (value) => controller.onChangedLand(value),
+                            onChanged: (value) =>
+                                controller.onChangedLand(value),
                             // validator: (value) =>
                             //     isFieldEmpty(controller.landController.text)
                             //         ? 'Enter Landmark'
@@ -486,11 +487,33 @@ class RegisterPage extends GetView<RegisterController> {
         ),
       );
 
+  Widget dropArrow() => Icon(
+        Icons.keyboard_arrow_down_rounded,
+        color: getPrimaryColor(),
+        size: getSize(25),
+      );
+
+  Widget dropLoader() => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: getSize(15),
+            height: getSize(15),
+            child: CircularProgressIndicator(
+              color: getPrimaryColor(),
+              strokeWidth: getSize(2),
+            ),
+          ),
+        ],
+      );
+
   Widget buildBottomNavigation() => ColoredBox(
         color: AppColors.appThemeColor.shade50,
         child: Padding(
           padding: getPadding(left: 15, top: 8, right: 15, bottom: 8),
           child: AppButton(
+            isEnable: controller.isBtnEnable.isTrue,
             buttonText: 'Submit',
             borderRadius: getSize(5),
             onTap: () => controller.submitAction(),

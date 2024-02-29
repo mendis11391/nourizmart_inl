@@ -26,8 +26,8 @@ class ProductListPage extends GetView<ProductListController> {
   AddressToolBar buildAppBar() => AddressToolBar(
         onTapToolAddress: () => controller.addressAction(),
         onTapToolBack: () => controller.backValidationAction(),
-        userName: 'User Name',
-        address: 'Sector 6, HSR Layout, Bengaluru, 560102 560102 560102',
+        userName: controller.userName.value,
+        address: controller.userAddress.value,
         hideBack: false,
         hideCart: true,
         hideNotification: true,

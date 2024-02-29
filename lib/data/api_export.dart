@@ -19,3 +19,9 @@ export 'package:nourish_mart/app/config/app_enum.dart';
 export 'package:nourish_mart/presentation/env.dart';
 
 export 'package:nourish_mart/data/models/user_exists_res_mod.dart';
+export 'package:nourish_mart/data/models/get_user_res_mod.dart';
+export 'package:nourish_mart/data/models/state_res_mod.dart';
+export 'package:nourish_mart/data/models/area_res_mod.dart';
+export 'package:nourish_mart/data/models/district_res_mod.dart';
+export 'package:nourish_mart/data/models/pincode_res_mod.dart';
+export 'package:nourish_mart/data/models/registration_res_mod.dart';

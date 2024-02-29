@@ -2,6 +2,8 @@ import '../../../../../app/utils/app_export.dart';
 
 class HomeController extends GetxController {
   var title = 'Home'.obs,
+      userName = '--'.obs,
+      userAddress = '--'.obs,
       isOfferLoading = true.obs,
       isOrderLoading = false.obs,
       circleInx = 0.obs,
@@ -13,14 +15,18 @@ class HomeController extends GetxController {
   late ScrollController orderScrollController;
   late RxList<String> offerList, orderList;
   Timer? carouselTimer;
+  late DateTime preBackPress;
 
   @override
   void onInit() {
     super.onInit();
+    userName.value = AppConstants.userName;
+    userAddress.value = AppConstants.userAddress;
     pgController = PageController(initialPage: 0, viewportFraction: 0.85);
     orderScrollController = ScrollController();
     offerList = <String>[].obs;
     orderList = <String>[].obs;
+    preBackPress = DateTime.now();
   }
 
   @override
@@ -43,8 +49,9 @@ class HomeController extends GetxController {
 
   getSharedValue() async {
     if (await delayNavigation(AppConstants.appShortDelayDuration)) {
-      // Api Call
-
+      UserDataController userData = await getUserDataController();
+      userName.value = userData.firstName.value;
+      userAddress.value = userData.fullAddress.value;
       invokeOfferApiCall();
       invokeOrderApiCall();
     }
@@ -203,6 +210,19 @@ class HomeController extends GetxController {
 
   orderAction(int index) {
     navigatePage(AppConstants.orderDetailsPage);
+  }
+
+  onPauseAction() {
+    carouselTimer?.cancel();
+  }
+
+  onResumeAction() {
+    if (offerList.isNotEmpty &&
+        carouselTimer != null &&
+        !carouselTimer!.isActive) {
+      appLog('Start Timer');
+      carouselTimer = getTimer();
+    }
   }
 
   // submitAction() async => apiDebounce(() async {

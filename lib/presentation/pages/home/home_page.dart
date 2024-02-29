@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../../../../app/utils/app_export.dart';
 import 'home_controller.dart';
 
@@ -6,7 +8,34 @@ class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     context.theme;
-    return Obx(() => buildScreen());
+    // return Obx(() => buildScreen());
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (didPop) return;
+        final timeGap = DateTime.now().difference(controller.preBackPress);
+        final cantExit = timeGap >= const Duration(seconds: 2);
+        controller.preBackPress = DateTime.now();
+        if (cantExit) {
+          const snack = SnackBar(
+            content: Text('Press back button again to exit'),
+            duration: Duration(seconds: 2),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snack);
+        } else {
+          AppConstants.isIOS ? exit(0) : SystemNavigator.pop(animated: true);
+        }
+      },
+      child: FocusDetector(
+        onFocusGained: () {
+          controller.onResumeAction();
+        },
+        onFocusLost: () {
+          controller.onPauseAction();
+        },
+        child: Obx(() => buildScreen()),
+      ),
+    );
   }
 
   Widget buildScreen() => GestureDetector(
@@ -23,8 +52,8 @@ class HomePage extends GetView<HomeController> {
         onTapToolUser: () => controller.profileAction(),
         onTapToolCart: () => controller.cardAction(),
         onTapToolNotification: () => controller.notificationAction(),
-        userName: 'User Name',
-        address: 'Sector 6, HSR Layout, Bengaluru, 560102 560102 560102',
+        userName: controller.userName.value,
+        address: controller.userAddress.value,
         notificationCount: controller.notificationCount,
         cartCount: controller.cartCount,
         hideCart: false,
@@ -169,18 +198,21 @@ class HomePage extends GetView<HomeController> {
       );
 
   Widget buildDiscountCard() => Padding(
-        padding: getPadding(left: 12, right: 12, top: 15),
+        padding: getPadding(left: 8, right: 8, top: 8),
         child: InkWell(
           onTap: () => controller.discountAction(),
           child: SizedBox(
             width: double.infinity,
-            height: getSize(150),
+            height: getSize(175),
             child: Container(
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                     colors: [
-                      Color.fromARGB(255, 97, 217, 248),
-                      Color(0xFF2DE48D),
+                      // Color.fromARGB(255, 97, 217, 248),
+                      // Color(0xFF2DE48D),
+                      // Colors.yellow, Color(0xffad9c00)
+                      Colors.yellow,
+                      Colors.orange,
                     ],
                     begin: FractionalOffset(0.0, 0.0),
                     end: FractionalOffset(0.0, 1.0),
@@ -189,7 +221,7 @@ class HomePage extends GetView<HomeController> {
                 borderRadius: BorderRadius.circular(getSize(5)),
               ),
               child: Padding(
-                padding: getPadding(left: 16, right: 16, top: 12, bottom: 12),
+                padding: getPadding(left: 12, right: 12, top: 8, bottom: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -206,16 +238,27 @@ class HomePage extends GetView<HomeController> {
                         ),
                       ),
                     ),
-                    const SpaceHeight(mHeight: 6),
+                    const SpaceHeight(mHeight: 3),
                     const AppText(
                       text: 'Discount Delivery',
                       size: 20,
                       weight: FontWeight.bold,
                     ),
-                    const SpaceHeight(mHeight: 6),
+                    const SpaceHeight(mHeight: 3),
                     const AppText(
                       text:
-                          'Lorem ipsum dolor sit amet, consecteturadipiscing elit do eiusmod tempor.',
+                          '\u2022 Order before 9pm get your products in discounted price next day.',
+                      size: 13,
+                    ),
+                    const SpaceHeight(mHeight: 2),
+                    const AppText(
+                      text:
+                          '\u2022 Discount ranges from 20% - 80% on product rate from actual market rate.',
+                      size: 13,
+                    ),
+                    const SpaceHeight(mHeight: 2),
+                    const AppText(
+                      text: '\u2022 Option for self pickup from our store.',
                       size: 13,
                     ),
                   ],
@@ -227,12 +270,12 @@ class HomePage extends GetView<HomeController> {
       );
 
   Widget buildInstantCard() => Padding(
-        padding: getPadding(left: 12, right: 12, top: 15),
+        padding: getPadding(left: 8, right: 8, top: 8),
         child: InkWell(
           onTap: () => controller.instantAction(),
           child: SizedBox(
             width: double.infinity,
-            height: getSize(150),
+            height: getSize(175),
             child: Container(
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
@@ -247,7 +290,7 @@ class HomePage extends GetView<HomeController> {
                 borderRadius: BorderRadius.circular(getSize(5)),
               ),
               child: Padding(
-                padding: getPadding(left: 16, right: 16, top: 12, bottom: 12),
+                padding: getPadding(left: 12, right: 12, top: 8, bottom: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -264,17 +307,32 @@ class HomePage extends GetView<HomeController> {
                         ),
                       ),
                     ),
-                    const SpaceHeight(mHeight: 6),
+                    const SpaceHeight(mHeight: 3),
                     const AppText(
                       text: 'Instant Delivery',
                       size: 20,
                       weight: FontWeight.bold,
+                      color: Colors.white,
                     ),
-                    const SpaceHeight(mHeight: 6),
+                    const SpaceHeight(mHeight: 3),
                     const AppText(
                       text:
-                          'Lorem ipsum dolor sit amet, consecteturadipiscing elit do eiusmod tempor.',
+                          '\u2022 Order anytime and get you products instantly.',
                       size: 13,
+                      color: Colors.white,
+                    ),
+                    const SpaceHeight(mHeight: 2),
+                    const AppText(
+                      text: '\u2022 Products price is as per market rate.',
+                      size: 13,
+                      color: Colors.white,
+                    ),
+                    const SpaceHeight(mHeight: 2),
+                    const AppText(
+                      text:
+                          '\u2022 Home delivery only (limited area currently).',
+                      size: 13,
+                      color: Colors.white,
                     ),
                   ],
                 ),

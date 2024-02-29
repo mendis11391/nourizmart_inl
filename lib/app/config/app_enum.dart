@@ -20,3 +20,6 @@ extension DeliveryTypeId on DeliveryType {
     return [1, 2][index];
   }
 }
+
+//* Register DropDown Type
+enum DropDownType { state, district, pincode, area }

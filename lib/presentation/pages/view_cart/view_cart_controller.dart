@@ -1,5 +1,9 @@
 import '../../../../../app/utils/app_export.dart';
-import '../product_list/units_bs.dart';
+import '../../../data/models/pincode_res_mod.dart';
+import '../../../domain/view_cart_use_case.dart';
+import '../product_list/bs/units_bs.dart';
+import 'bs/pincode_bs.dart';
+import 'bs/store_bs.dart';
 
 class ViewCartController extends GetxController {
   var title = 'My Cart'.obs,
@@ -23,20 +27,32 @@ class ViewCartController extends GetxController {
       tax = 10.0.obs,
       selectedPick = 0.obs, // 0 - Home, 1 - Self
       isAllowEditing = true.obs,
+      loadingPincode = false.obs,
+      tempPincode = ''.obs,
+      previousSelected = '',
+      isOpenPincodeBS = false.obs,
+      isPageActive = false.obs,
       showLoadingStyle = ApiCallLoadingTypeEnum.none.obs;
-  late ScrollController scrollController, unitsController;
+  late ScrollController scrollController,
+      unitsScrollController,
+      pincodeScrollController;
   late RxList<String> responseList;
   late RxList<String> singleItemQty;
-  late AppRepo appRepo;
+  late ViewCartUseCase useCase;
+  late List<PincodeResponse> pincodeList;
+  late PincodeResponse selectedPincodeItem;
 
   @override
   void onInit() {
     super.onInit();
     scrollController = ScrollController();
-    unitsController = ScrollController();
+    unitsScrollController = ScrollController();
+    pincodeScrollController = ScrollController();
     responseList = <String>[].obs;
     singleItemQty = <String>[].obs;
-    appRepo = AppRepoImpl();
+    useCase = ViewCartUseCase(AppRepoImpl());
+    pincodeList = <PincodeResponse>[];
+    selectedPincodeItem = PincodeResponse();
   }
 
   @override
@@ -50,7 +66,9 @@ class ViewCartController extends GetxController {
   void onClose() {
     apiTimer?.cancel();
     scrollController.dispose();
-    unitsController.dispose();
+    unitsScrollController.dispose();
+    pincodeScrollController.dispose();
+    isPageActive.value = false;
   }
 
   backValidationAction() {
@@ -58,6 +76,7 @@ class ViewCartController extends GetxController {
   }
 
   getSharedValue() async {
+    isPageActive.value = true;
     if (await delayNavigation(AppConstants.appShortDelayDuration)) {
       isInstantDelivery = (await getStorageValue(UserKeys.whichDeliveryInt) ==
           DeliveryType.instant.value);
@@ -206,16 +225,30 @@ class ViewCartController extends GetxController {
     isVisibleAmt(!isVisibleAmt.value);
   }
 
-  changeAddressAction() {
-    showToast('Change Address Action');
+  changeAddressAction() async {
+    await saveStorageValue(UserKeys.whereFromAddressStr, 'cart');
+    await navigatePage(AppConstants.addressListPage);
   }
 
   storePincodeAction() {
-    showToast('Store Pincode Action');
+    hideKeyBoardFocus();
+    loadingPincode.value = true;
+    apiCallPincode();
   }
 
-  changeStoreAddressAction() {
-    showToast('Store Address Action');
+  changeStoreAddressAction() async {
+    hideKeyBoardFocus();
+    Get.bottomSheet(
+      const StoreBottomSheet(),
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      isDismissible: false,
+      enableDrag: false,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
   }
 
   saveAction() {
@@ -240,4 +273,78 @@ class ViewCartController extends GetxController {
         hideKeyBoardFocus();
         navigatePage(AppConstants.paymentPage);
       });
+
+  apiCallPincode() async {
+    try {
+      String payload = validString(9);
+      pincodeList.clear();
+      pincodeList = await useCase.executePincode(payload);
+      if (pincodeList.isNotEmpty) {
+        // if (pincodeList.length == 1) {
+        //   if (await delayNavigation(50)) {
+        //     selectedPincodeItem = pincodeList.first;
+        //     storePincode.value = validString(pincodeList.first.pincode);
+        //   }
+        // }
+        if (isPageActive.isTrue && isOpenPincodeBS.isFalse) {
+          isOpenPincodeBS.value = true;
+          showDropDown();
+        }
+      } else {
+        handleApiException('', 'Empty Pincode List');
+      }
+      loadingPincode.value = false;
+    } catch (e) {
+      handleApiException(e, 'Pincode List');
+      loadingPincode.value = false;
+    }
+  }
+
+  showDropDown() async {
+    hideKeyBoardFocus();
+    previousSelected = '';
+    List<String> bsList = [];
+    previousSelected = validString(selectedPincodeItem.pincode);
+    for (var it in pincodeList) {
+      bsList.add(validString(it.pincode));
+    }
+
+    final result = await Get.bottomSheet(
+      PincodeBottomSheet(
+        controller: this,
+        listItem: bsList,
+        onTapClose: () => bsPincodeCloseAction(),
+        previousSelect: previousSelected,
+      ),
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      isDismissible: false,
+      enableDrag: false,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
+
+    if (!isFieldEmpty(result)) {
+      bsPincodeSelectAction(result);
+    }
+  }
+
+  bsPincodeCloseAction() {
+    isOpenPincodeBS.value = false;
+    backAction();
+  }
+
+  bsPincodeSelectAction(String data) {
+    isOpenPincodeBS.value = false;
+    for (var pr in pincodeList) {
+      if (validString(pr.pincode) == data) {
+        if (storePincode.value != data) {
+          storePincode.value = validString(pr.pincode);
+          selectedPincodeItem = pr;
+        }
+      }
+    }
+  }
 }

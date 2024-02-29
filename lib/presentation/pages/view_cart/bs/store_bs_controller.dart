@@ -1,32 +1,30 @@
-import '../../../../../app/utils/app_export.dart';
+import '../../../../app/utils/app_export.dart';
 
-class AddressListController extends GetxController {
-  var title = 'Address'.obs,
+class StoreController extends GetxController {
+  var query = ''.obs,
       isLoading = true.obs,
       limits = 10,
       page = 1,
       isNoMoreItem = false.obs,
       isLoadMoreApi = false.obs,
-      totalAddress = 0.obs,
-      whereFrom = ''.obs,
+      totalProduct = 0.obs,
+      scrollPos = 0.0.obs,
       showLoadingStyle = ApiCallLoadingTypeEnum.none.obs;
   late ScrollController scrollController;
   late RxList<String> responseList;
-  late AppRepo appRepo;
 
   @override
   void onInit() {
     super.onInit();
     scrollController = ScrollController();
     responseList = <String>[].obs;
-    appRepo = AppRepoImpl();
   }
 
   @override
   void onReady() {
     super.onReady();
     getSharedValue();
-    // paginationTask();
+    paginationTask();
   }
 
   @override
@@ -35,25 +33,18 @@ class AddressListController extends GetxController {
     scrollController.dispose();
   }
 
-  backValidationAction() {
-    backAction();
-  }
-
   getSharedValue() async {
     if (await delayNavigation(AppConstants.appShortDelayDuration)) {
-      whereFrom.value =
-          validString(await getStorageValue(UserKeys.whereFromAddressStr));
-
       invokeApiCall();
     }
   }
 
   invokeApiCall() async {
     showLoadingStyle.value = ApiCallLoadingTypeEnum.circularProgress;
-    defaultApiCall();
+    defaultApiCall(query.value);
   }
 
-  defaultApiCall() async {
+  defaultApiCall(String searchText) async {
     if (await checkInternetConnection()) {
       isLoading(true);
       isLoadMoreApi(false);
@@ -63,13 +54,13 @@ class AddressListController extends GetxController {
         AppLoader.showLoadingDialog();
       }
 
-      apiCallAddressList(false);
+      apiCalStoreList(searchText, false);
     } else {
       await resetLoading(AppConstants.appZeroDuration);
     }
   }
 
-  apiCallAddressList(bool isPagination) async {
+  apiCalStoreList(String searchText, bool isPagination) async {
     if (!isPagination) {
       responseList.clear();
     }
@@ -92,14 +83,13 @@ class AddressListController extends GetxController {
       // } else {
       //   showToast('Failed: OnBoard Store List', msgType: ToastEnumType.error);
       // }
-
-      for (int i = 0; i < 20; i++) {
+      for (int i = 0; i < 10; i++) {
         responseList.add(validString(i));
       }
 
       await resetLoading(AppConstants.appResetLoadingDuration);
     } catch (e) {
-      handleApiException(e, 'Address List');
+      handleApiException(e, 'Store List');
     }
   }
 
@@ -125,12 +115,13 @@ class AddressListController extends GetxController {
 
   paginationTask() {
     scrollController.addListener(() {
+      scrollPos.value = scrollController.position.pixels;
       if (scrollController.position.pixels ==
               scrollController.position.maxScrollExtent &&
           isLoadMoreApi.isFalse) {
         // page += limits;
         page++;
-        getMoreTask();
+        //getMoreTask();
       }
     });
   }
@@ -140,7 +131,7 @@ class AddressListController extends GetxController {
       if (isNoMoreItem.isFalse) {
         isLoadMoreApi(true);
         showLoadingStyle.value = ApiCallLoadingTypeEnum.loadMore;
-        apiCallAddressList(true);
+        apiCalStoreList(query.value, true);
       } else {
         // page -= limits;
         page--;
@@ -150,24 +141,7 @@ class AddressListController extends GetxController {
     }
   }
 
-  deleteAction(String item, int idx) {
-    showToast('Delete Action');
-  }
-
-  editAction(String item, int idx) {
-    showToast('Edit Action');
-  }
-
-  addAction() {
-    navigatePage(AppConstants.addAddressPage);
-  }
-
   selectAction(String item) {
-    showToast('Select Address $item');
+    showToast('Select Store Name $item');
   }
-
-  // submitAction() async => apiDebounce(() async {
-  //       hideKeyBoardFocus();
-  //       navigatePage(AppConstants.paymentDetailsPage);
-  //     });
 }

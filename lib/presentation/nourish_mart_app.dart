@@ -29,10 +29,9 @@ class NourishMartApp extends StatelessWidget {
           ),
         ),
         navigatorKey: navigatorKey,
-        initialRoute: AppRoutes.homeRoute,
-        // initialRoute: AppConstants.loginStatus == 1
-        //     ? AppRoutes.homeRoute
-        //     : AppRoutes.loginRoute,
+        initialRoute: AppConstants.loginStatus == 1
+            ? AppRoutes.homeRoute
+            : AppRoutes.loginRoute,
         getPages: RouteGenerator.routes,
         unknownRoute: RouteGenerator.unknownRoute,
       );

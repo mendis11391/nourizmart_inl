@@ -92,91 +92,94 @@ class AddressListPage extends GetView<AddressListController> {
             width: 1.0,
           ),
         ),
-        child: Padding(
-          padding: getPadding(left: 8, right: 8, top: 8, bottom: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(
-                Icons.location_on_rounded,
-                color: getPrimaryColor(),
-                size: getSize(30),
-              ),
-              const SpaceWidth(mWidth: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AppText(
-                      text: 'User Name $idx',
-                      size: 14,
-                      weight: FontWeight.bold,
-                    ),
-                    const SpaceHeight(mHeight: 3),
-                    AppText(
-                      text: '+91 999999999',
-                      size: 12,
-                      color: Colors.grey.shade700,
-                    ),
-                    const SpaceHeight(mHeight: 3),
-                    const AppText(
-                      text:
-                          '3rd Floor, Sector 6, HSR Layout, Bangalore, Karnataka - 560102',
-                      size: 12,
-                    ),
-                    const SpaceHeight(mHeight: 3),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Visibility(
-                          visible: idx == 0,
-                          maintainSize: true,
-                          maintainAnimation: true,
-                          maintainState: true,
-                          child: Chip(
-                            backgroundColor: Colors.white,
-                            side:
-                                BorderSide(color: getPrimaryColor(), width: 1),
-                            label: AppText(
-                              text: 'Default',
-                              size: getFontSize(12),
-                              color: getPrimaryColor(),
-                              weight: FontWeight.w600,
-                            ),
-                            labelPadding: getPadding(left: 10, right: 10),
-                            padding: EdgeInsets.zero,
-                            visualDensity: VisualDensity.compact,
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                          ),
-                        ),
-                        const Spacer(),
-                        IconButton(
-                          visualDensity:
-                              const VisualDensity(horizontal: -4, vertical: -4),
-                          onPressed: () => controller.editAction(item, idx),
-                          icon: const AppImage(
-                            assetName: AppResource.icEdit,
-                            // size: getSize(20),
-                          ),
-                        ),
-                        const SpaceWidth(mWidth: 10),
-                        IconButton(
-                          visualDensity:
-                              const VisualDensity(horizontal: -4, vertical: -4),
-                          onPressed: () => controller.deleteAction(item, idx),
-                          icon: const AppImage(
-                            assetName: AppResource.icDelete,
-                            // size: getSize(20),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
+        child: InkWell(
+          onTap: () => controller.selectAction(item),
+          child: Padding(
+            padding: getPadding(left: 8, right: 8, top: 8, bottom: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.location_on_rounded,
+                  color: getPrimaryColor(),
+                  size: getSize(30),
                 ),
-              ),
-            ],
+                const SpaceWidth(mWidth: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppText(
+                        text: 'User Name $idx',
+                        size: 14,
+                        weight: FontWeight.bold,
+                      ),
+                      const SpaceHeight(mHeight: 3),
+                      AppText(
+                        text: '+91 999999999',
+                        size: 12,
+                        color: Colors.grey.shade700,
+                      ),
+                      const SpaceHeight(mHeight: 3),
+                      const AppText(
+                        text:
+                            '3rd Floor, Sector 6, HSR Layout, Bangalore, Karnataka - 560102',
+                        size: 12,
+                      ),
+                      const SpaceHeight(mHeight: 3),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Visibility(
+                            visible: idx == 0,
+                            maintainSize: true,
+                            maintainAnimation: true,
+                            maintainState: true,
+                            child: Chip(
+                              backgroundColor: Colors.white,
+                              side: BorderSide(
+                                  color: getPrimaryColor(), width: 1),
+                              label: AppText(
+                                text: 'Default',
+                                size: getFontSize(12),
+                                color: getPrimaryColor(),
+                                weight: FontWeight.w600,
+                              ),
+                              labelPadding: getPadding(left: 10, right: 10),
+                              padding: EdgeInsets.zero,
+                              visualDensity: VisualDensity.compact,
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                            ),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                            visualDensity: const VisualDensity(
+                                horizontal: -4, vertical: -4),
+                            onPressed: () => controller.editAction(item, idx),
+                            icon: const AppImage(
+                              assetName: AppResource.icEdit,
+                              // size: getSize(20),
+                            ),
+                          ),
+                          const SpaceWidth(mWidth: 10),
+                          IconButton(
+                            visualDensity: const VisualDensity(
+                                horizontal: -4, vertical: -4),
+                            onPressed: () => controller.deleteAction(item, idx),
+                            icon: const AppImage(
+                              assetName: AppResource.icDelete,
+                              // size: getSize(20),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );

@@ -1,9 +1,11 @@
 import '../../../../../app/utils/app_export.dart';
-import 'filter_bs.dart';
-import 'units_bs.dart';
+import 'bs/filter_bs.dart';
+import 'bs/units_bs.dart';
 
 class ProductListController extends GetxController {
   var title = 'Product List'.obs,
+      userName = '--'.obs,
+      userAddress = '--'.obs,
       query = ''.obs,
       isLoading = true.obs,
       limits = 10,
@@ -26,6 +28,8 @@ class ProductListController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    userName.value = AppConstants.userName;
+    userAddress.value = AppConstants.userAddress;
     scrollController = ScrollController();
     chipScrollController = ScrollController();
     unitsController = ScrollController();
@@ -63,6 +67,9 @@ class ProductListController extends GetxController {
     if (await delayNavigation(AppConstants.appShortDelayDuration)) {
       isInstantDelivery = (await getStorageValue(UserKeys.whichDeliveryInt) ==
           DeliveryType.instant.value);
+      UserDataController userData = await getUserDataController();
+      userName.value = userData.firstName.value;
+      userAddress.value = userData.fullAddress.value;
 
       for (int i = 0; i < 20; i++) {
         responseList.add(validString(i));

@@ -24,6 +24,8 @@ class AppConstants {
   static String appVersionName = '';
   static int appBuildNumber = 0;
   static int loginStatus = 0;
+  static String userName = '--';
+  static String userAddress = '--';
 
   static const int splashPage = 101;
   static const int loginPage = 102;

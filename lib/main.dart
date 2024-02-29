@@ -7,10 +7,11 @@ final navigatorKey = GlobalKey<NavigatorState>();
 BuildContext applicationContext = navigatorKey.currentContext!;
 
 main() async {
-  await initServices();
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await initServices();
   // FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -30,7 +31,7 @@ main() async {
 
 initServices() async {
   try {
-    WidgetsFlutterBinding.ensureInitialized();
+    // WidgetsFlutterBinding.ensureInitialized();
     await GetStorage.init('USER_STORAGE');
     await initUserStorage();
     Get.put(DioServiceImpl(), permanent: true);

@@ -1,4 +1,4 @@
-import '../../../app/utils/app_export.dart';
+import '../../../../app/utils/app_export.dart';
 
 class EditProfileController extends GetxController {
   var empty = ''.obs,

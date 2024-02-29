@@ -1,4 +1,6 @@
 import '../../../../../app/utils/app_export.dart';
+import '../../../data/models/get_user_res_mod.dart';
+import '../../../domain/otp_use_case.dart';
 
 class OtpController extends GetxController {
   var title = 'Verify Code'.obs,
@@ -14,7 +16,7 @@ class OtpController extends GetxController {
   late ScrollController scrollController;
   late TextEditingController otpController;
   late FirebaseAuthRepo authRepo;
-  late AppRepo appRepo;
+  late OtpUseCase useCase;
   Timer? clockTime;
 
   @override
@@ -23,7 +25,7 @@ class OtpController extends GetxController {
     scrollController = ScrollController();
     otpController = TextEditingController();
     authRepo = Get.find<FirebaseAuthRepo>();
-    appRepo = AppRepoImpl();
+    useCase = OtpUseCase(AppRepoImpl());
   }
 
   @override
@@ -79,11 +81,19 @@ class OtpController extends GetxController {
   submitAction() async => apiDebounce(() async {
         hideKeyBoardFocus();
         AppLoader.showLoadingDialog();
-        int verified = await authRepo.verifyOtp(verificationId, otpCode.value);
+        // int verified = await authRepo.verifyOtp(verificationId, otpCode.value);
+        bool isVerified =
+            await authRepo.verifyOtp(verificationId, otpCode.value);
         // verified = 1, notVerified = 0, exception = -1
-        if (verified >= 0) {
+        // if (verified >= 0) {
+        //   apiGetUserExists();
+        // }else{
+        //   otpCode.value = '';
+        //   otpController.clear();
+        // }
+        if (isVerified) {
           apiGetUserExists();
-        }else{
+        } else {
           otpCode.value = '';
           otpController.clear();
         }
@@ -106,11 +116,12 @@ class OtpController extends GetxController {
   apiGetUserExists() async {
     try {
       String firebaseId = await getStorageValue(UserKeys.firebaseIdStr);
-      var response = await appRepo.checkIfUserExists(firebaseId);
-      await resetLoading();
+      var response = await useCase.executeUserExists(firebaseId);
+
       if (response.exists ?? false) {
-        navigatePage(AppConstants.homePage);
+        apiCallGetUser();
       } else {
+        await resetLoading();
         navigatePage(AppConstants.registerPage);
       }
     } catch (ex) {
@@ -125,5 +136,25 @@ class OtpController extends GetxController {
 
   resetLoading() async {
     await AppLoader.hideLoadingDialog();
+  }
+
+  apiCallGetUser() async {
+    try {
+      String firebaseId = await getStorageValue(UserKeys.firebaseIdStr);
+      var response = await useCase.executeUserInfo(firebaseId);
+
+      await resetLoading();
+      if (!isFieldEmpty(response.first.firstName)) {
+        await saveStorageValue(
+            UserKeys.userModel, userResponseSingleToJson(response.first));
+        await saveStorageValue(UserKeys.userLoggedInInt, 1);
+        await setUserValueForCrashlytics();
+        await navigatePage(AppConstants.homePage);
+      } else {
+        handleApiException('', 'Error User Info');
+      }
+    } catch (ex) {
+      handleApiException(ex, 'User Info');
+    }
   }
 }

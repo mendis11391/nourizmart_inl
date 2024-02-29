@@ -61,7 +61,8 @@ class OtpPage extends GetView<OtpController> {
                 ),
                 const SpaceHeight(mHeight: 20),
                 Pinput(
-                  controller: controller.otpController,
+                    controller: controller.otpController,
+                    androidSmsAutofillMethod: AndroidSmsAutofillMethod.none,
                     length: 6,
                     showCursor: true,
                     defaultPinTheme: PinTheme(
@@ -82,6 +83,7 @@ class OtpPage extends GetView<OtpController> {
                       if (controller.isResentBtnEnable.isFalse) {
                         controller.otpCode.value = validString(code);
                         controller.isBtnEnable.value = true;
+                        controller.submitAction();
                       }
                     }),
                 const SpaceHeight(mHeight: 20),

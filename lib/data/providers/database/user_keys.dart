@@ -8,6 +8,7 @@ class UserKeys {
 
   //* Auth data
   static const String accessTokenStr = 'ats';
+  static const String userModel = 'um';
   static const String userLoggedInInt = 'uli_i';
   static const String userMobileStr = 'ums';
   static const String userVerificationIdStr = 'uvi_s';

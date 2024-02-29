@@ -1,14 +1,14 @@
 import '../../app/utils/app_export.dart';
 
 class FirebaseAuthRepo extends GetxController {
-  late final FirebaseAuth auth = FirebaseAuth.instance;
+  late final FirebaseAuth auth;
   late final Rx<User?> firebaseUser;
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-
-  // }
+  @override
+  void onInit() {
+    super.onInit();
+    auth = FirebaseAuth.instance;
+  }
 
   @override
   void onReady() {
@@ -18,7 +18,7 @@ class FirebaseAuthRepo extends GetxController {
 
   Future<bool> loginWithPhone(String mobile) async {
     await saveStorageValue(UserKeys.userMobileStr, mobile);
-    String phone  = '+91$mobile';
+    String phone = '+91$mobile';
     Completer<bool> completer = Completer<bool>();
     try {
       await auth.verifyPhoneNumber(
@@ -81,26 +81,29 @@ class FirebaseAuthRepo extends GetxController {
     await AppLoader.hideLoadingDialog();
   }
 
-  Future<int> verifyOtp(String verificationId, String otp) async {
-    int result = -1;
+  Future<bool> verifyOtp(String verificationId, String otp) async {
+    // int result = -1;
+    bool isSuccess = false;
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: verificationId, smsCode: otp);
       User? user = (await auth.signInWithCredential(credential)).user;
       if (user != null) {
         await saveStorageValue(UserKeys.firebaseIdStr, user.uid);
-        // isSuccess = true;
-        DocumentSnapshot userDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .get();
+        isSuccess = true;
+        // DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        //     .collection('users')
+        //     .doc(user.uid)
+        //     .get();
         //appLog(userDoc.data(), logType: LogType.json);
-        result = userDoc.exists ? 1 : 0;
-        return result;
+        // result = userDoc.exists ? 1 : 0;
+        // return result;
+        return isSuccess;
       } else {
         await resetLoading();
         showToast('Unable to verify your OTP');
-        return result;
+        return isSuccess;
+        // return result;
       }
     } on FirebaseAuthException catch (e) {
       appLog(e.code, logType: LogType.error);
@@ -112,11 +115,17 @@ class FirebaseAuthRepo extends GetxController {
       } else {
         handleApiException((e.message), 'Verify Otp');
       }
-
-      return result;
+      return isSuccess;
+      // return result;
     } catch (ex) {
       handleApiException(ex, 'Verify Otp');
-      return result;
+      return isSuccess;
+      // return result;
     }
+  }
+
+  Future<bool> signOut() async {
+    await auth.signOut();
+    return auth.currentUser == null;
   }
 }

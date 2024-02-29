@@ -1,22 +1,27 @@
 import '../../../../../app/utils/app_export.dart';
-import 'edit_profile_bs.dart';
+import 'bs/edit_profile_bs.dart';
 
 class ProfileController extends GetxController {
   var title = 'Profile'.obs,
       version = ''.obs,
+      firstName = 'First Name'.obs,
+      lastName = 'Last Name'.obs,
+      mobile = 'Mobile'.obs,
       showLoadingStyle = ApiCallLoadingTypeEnum.none.obs;
   late ScrollController scrollController;
+  late FirebaseAuthRepo authRepo;
 
   @override
   void onInit() {
     super.onInit();
     scrollController = ScrollController();
+    authRepo = Get.find<FirebaseAuthRepo>();
   }
 
   @override
   void onReady() {
     super.onReady();
-    version.value = 'v ${AppConstants.appVersionName}';
+
     getSharedValue();
   }
 
@@ -31,8 +36,12 @@ class ProfileController extends GetxController {
   }
 
   getSharedValue() async {
+    version.value = 'v ${AppConstants.appVersionName}';
     if (await delayNavigation(AppConstants.appShortDelayDuration)) {
-      // Api Call
+      UserDataController userData = await getUserDataController();
+      firstName.value = userData.firstName.value;
+      lastName.value = userData.lastName.value;
+      mobile.value = userData.mobile.value;
     }
   }
 
@@ -77,8 +86,21 @@ class ProfileController extends GetxController {
     }
   }
 
-  logoutAction() {
-    showToast('Logout Action');
+  logoutAction() async {
+    callYesOrNoDialog(
+        mTitle: '',
+        mDescriptions: 'Are you sure you want to logout?',
+        mBtn1Name: 'Logout',
+        mBtn2Name: 'Cancel',
+        onPressedBtn1: () async {
+          await AppLoader.showLoadingDialog();
+          bool isLogout = await authRepo.signOut();
+          if (isLogout) {
+            await AppLoader.hideLoadingDialog();
+            showToast('User logout successfully');
+            await sessionTimedOut();
+          }
+        });
   }
 
   // submitAction() async => apiDebounce(() async {

@@ -1,5 +1,3 @@
-
-
 import '../../../../app/utils/app_export.dart';
 
 class SplashPage extends StatefulWidget {
@@ -23,9 +21,7 @@ class SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    // appLog('initState');
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // appLog('All ui are rendered');
       getBuildVersion();
       startCountdownTimer();
     });
@@ -33,7 +29,6 @@ class SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    // appLog('Start build');
     return FocusDetector(
       onFocusGained: () async {
         // await invokeAppPermission();
@@ -55,10 +50,7 @@ class SplashPageState extends State<SplashPage> {
 
   getBuildVersion() async {
     try {
-      var serverName = Env.baseurl == Env.stagingServer
-          ? 'Dev'
-          
-              : '';
+      var serverName = Env.baseurl == Env.stagingServer ? 'Dev' : '';
       String yamlString = await rootBundle.loadString('pubspec.yaml');
       var lines = yamlString.split('\n');
       String versionLine =
@@ -82,7 +74,6 @@ class SplashPageState extends State<SplashPage> {
 
   startCountdownTimer() async {
     if (await delayNavigation(4000)) {
-      // appLog('Finish Count down');
       isAllowNextPage = true;
       moveToNextPage();
     }
@@ -92,6 +83,7 @@ class SplashPageState extends State<SplashPage> {
     // if (isAllowAllPermission && isAllowNextPage) {
     isAllowAllPermission = false;
     isAllowNextPage = false;
+    await setUserValueForCrashlytics();
     int loginStatusInt =
         validInt(await getStorageValue(UserKeys.userLoggedInInt));
     AppConstants.loginStatus = loginStatusInt;
@@ -100,7 +92,6 @@ class SplashPageState extends State<SplashPage> {
   }
 
   // onResumeAction() async {
-  //   appLog('onResumeAction');
   //   // if (isAllowAllPermission) {
   //   //   moveToNextPage();
   //   // } else if (!permanentlyDenied && !isErrorPermissionDia) {
